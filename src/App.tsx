@@ -8,10 +8,8 @@ type MyComponentState = {
 };
 
 class App extends Component<object, MyComponentState> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(props: MyComponentState) {
     super(props);
-    // Инициализируем состояние с начальным значением count = 0
     this.state = {
       count: 0,
     };
@@ -31,9 +29,8 @@ class App extends Component<object, MyComponentState> {
         <div className="card">
           <button
             onClick={() =>
-              // Используем setState для увеличения значения count на 1
               this.setState((prevState) => ({
-                count: prevState.count + 1,
+                count: prevState.count + 1
               }))
             }
           >
