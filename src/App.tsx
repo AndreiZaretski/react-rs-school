@@ -30,7 +30,7 @@ class App extends Component<object, MyComponentState> {
           <button
             onClick={() =>
               this.setState((prevState) => ({
-                count: prevState.count + 1
+                count: prevState.count + 1,
               }))
             }
           >
@@ -48,4 +48,4 @@ class App extends Component<object, MyComponentState> {
   }
 }
 
-export default App;
+export default App

@@ -15,7 +15,7 @@
 
   "lint-staged": {
     "*.ts": [
-      "eslint ./src --ext ts,tsx --fix",
+      "eslint --fix",
       "prettier --write ."
     ],
     "*.scss": [
