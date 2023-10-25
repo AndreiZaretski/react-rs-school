@@ -9,9 +9,9 @@ type MyComponentState = {
 
 class App extends Component<object, MyComponentState> {
   constructor(props: MyComponentState) {
-    super(props)
+    super(props);
     this.state = {
-      count: 0
+      count: 0,
     };
   }
   render() {
@@ -48,4 +48,4 @@ class App extends Component<object, MyComponentState> {
   }
 }
 
-export default App
+export default App;

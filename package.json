@@ -12,9 +12,8 @@
     "prepare": "husky install",
     "lintstaged": "lint-staged --relative"
   },
-
   "lint-staged": {
-    "*.ts": [
+    "*.(ts|tsx|js|jsx)": [
       "eslint --fix",
       "prettier --write ."
     ],
@@ -22,7 +21,6 @@
       "prettier --write -config .prettierrc"
     ]
   },
-
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
