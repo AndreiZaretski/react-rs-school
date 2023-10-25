@@ -49,5 +49,3 @@ class App extends Component<object, MyComponentState> {
 }
 
 export default App;
-
-//some change
