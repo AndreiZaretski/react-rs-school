@@ -16,7 +16,7 @@
     "*.ts": [
       "eslint --fix"
     ],
-    "*.css": [
+    "*.scss": [
       "prettier --write -config .prettierrc"
     ]
   },
