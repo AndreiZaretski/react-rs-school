@@ -13,9 +13,9 @@
     "lintstaged": "lint-staged --relative"
   },
   "lint-staged": {
-    "*.(ts|tsx|jsx)": [
+    "*.(ts|tsx|js|jsx)": [
       "eslint --fix",
-      "prettier --write ."
+      "prettier --write -config .prettierrc"
     ],
     "*.scss": [
       "prettier --write -config .prettierrc"
