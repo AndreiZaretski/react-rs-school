@@ -2,6 +2,7 @@ import { Component } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.scss';
+import SearchContent from './components/search-input/search-input';
 
 type MyComponentState = {
   count: number;
@@ -18,6 +19,7 @@ class App extends Component<object, MyComponentState> {
     return (
       <>
         <div>
+          <SearchContent />
           <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
             <img src={viteLogo} className="logo" alt="Vite logo" />
           </a>
