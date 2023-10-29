@@ -1,31 +1,51 @@
 import { Component } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
 import './App.scss';
 import SearchContent from './components/search-input/search-input';
+import { ResponseResult, InfoData } from './types/response-interface';
 
-type MyComponentState = {
+interface MyComponentState {
   count: number;
-};
+  data: ResponseResult[];
+  info: InfoData | null;
+  loading: boolean;
+}
 
 class App extends Component<object, MyComponentState> {
-  constructor(props: MyComponentState) {
+  constructor(props: object) {
     super(props);
     this.state = {
       count: 0,
+      data: [],
+      info: null,
+      loading: false,
     };
   }
+
+  handleResponse = (results: ResponseResult[], info: InfoData) => {
+    this.setState({
+      data: results,
+      info: info,
+    });
+    console.log(results, info);
+  };
+
+  handleLoading = (loading: boolean) => {
+    this.setState({
+      loading: loading,
+    });
+    console.log(loading);
+  };
+
   render() {
     return (
       <>
         <div>
-          <SearchContent />
-          <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-            <img src={viteLogo} className="logo" alt="Vite logo" />
-          </a>
-          <a href="https://react.dev" target="_blank" rel="noreferrer">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
+          <SearchContent
+            onResponse={this.handleResponse}
+            data={this.state.data}
+            info={this.state.info}
+            onLoading={this.handleLoading}
+          />
         </div>
         <h1>Vite + React</h1>
         <div className="card">
