@@ -1,22 +1,16 @@
 import { Component } from 'react';
 import axios from 'axios';
-import { InfoData, ResponseResult } from '../../types/response-interface';
+import { ResponseResult } from '../../types/response-interface';
 import { API_URL } from '../../constants/request-url';
-
-interface SearchProps {
-  data: ResponseResult[];
-  info: InfoData | null;
-
-  onResponse: (results: ResponseResult[], info: InfoData) => void;
-  onLoading: (loading: boolean) => void;
-}
+import './search-input.scss';
+import { SearchProps } from '../../types/search-props';
 
 interface MyState {
   input: string;
   loading: boolean;
 }
 
-class SearchContent extends Component<SearchProps, MyState> {
+class SearchInfo extends Component<SearchProps, MyState> {
   constructor(props: SearchProps) {
     super(props);
     this.state = {
@@ -75,19 +69,24 @@ class SearchContent extends Component<SearchProps, MyState> {
       }
     } catch (error) {
       this.props.onLoading(false);
-      throw new Error('Somethig went wrong');
+      this.props.onResponse([], null);
     }
   };
 
   render() {
     return (
-      <div className="input-button">
+      <div className="search-data">
         <input
           type="text"
+          className="search-data__input"
           value={this.state.input}
           onChange={this.handleChange}
         />
-        <button type="button" onClick={this.handleClick}>
+        <button
+          type="button"
+          className="search-data__button"
+          onClick={this.handleClick}
+        >
           Search
         </button>
       </div>
@@ -95,4 +94,4 @@ class SearchContent extends Component<SearchProps, MyState> {
   }
 }
 
-export default SearchContent;
+export default SearchInfo;

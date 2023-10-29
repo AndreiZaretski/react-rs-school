@@ -1,70 +1,57 @@
 import { Component } from 'react';
 import './App.scss';
-import SearchContent from './components/search-input/search-input';
+import reactLogo from './assets/react.svg';
+import SearchInfo from './components/search-input/search-input';
+import Results from './components/result-component/result-component';
 import { ResponseResult, InfoData } from './types/response-interface';
 
-interface MyComponentState {
-  count: number;
+interface AppComponentState {
   data: ResponseResult[];
   info: InfoData | null;
   loading: boolean;
 }
 
-class App extends Component<object, MyComponentState> {
-  constructor(props: object) {
-    super(props);
-    this.state = {
-      count: 0,
-      data: [],
-      info: null,
-      loading: false,
-    };
-  }
+class App extends Component {
+  state: AppComponentState = {
+    data: [],
+    info: null,
+    loading: false,
+  };
 
-  handleResponse = (results: ResponseResult[], info: InfoData) => {
+  handleResponse = (results: ResponseResult[], info: InfoData | null) => {
     this.setState({
       data: results,
       info: info,
     });
-    console.log(results, info);
   };
 
   handleLoading = (loading: boolean) => {
     this.setState({
       loading: loading,
     });
-    console.log(loading);
   };
 
   render() {
     return (
       <>
         <div>
-          <SearchContent
+          <SearchInfo
             onResponse={this.handleResponse}
             data={this.state.data}
             info={this.state.info}
             onLoading={this.handleLoading}
           />
         </div>
-        <h1>Vite + React</h1>
-        <div className="card">
-          <button
-            onClick={() =>
-              this.setState((prevState) => ({
-                count: prevState.count + 1,
-              }))
-            }
-          >
-            count is {this.state.count}
-          </button>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test HMR
-          </p>
+        <div className="result">
+          {this.state.loading ? (
+            <div className="result__loading">
+              <p>...Loading</p>
+              <img src={reactLogo} className="logo" alt="React logo" />
+            </div>
+          ) : (
+            <Results data={this.state.data} info={this.state.info} />
+          )}
         </div>
-        <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
-        </p>
       </>
     );
   }
