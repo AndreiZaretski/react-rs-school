@@ -1,0 +1,28 @@
+.content {
+  min-height: calc(100vh - 88px - 48px);
+  &__empty {
+    margin: 0 auto;
+    padding: 5rem;
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+  }
+  &__cards {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__item {
+    border: 2px solid gray;
+    border-radius: 10px;
+    margin: 2rem;
+  }
+
+  &__info {
+    padding: 2rem;
+    font-weight: bold;
+    text-align: right;
+  }
+}

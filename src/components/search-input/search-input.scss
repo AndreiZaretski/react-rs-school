@@ -1,0 +1,17 @@
+.search-data {
+  background-color: blueviolet;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 88px;
+  &__input {
+    display: block;
+    height: 50px;
+    margin-right: 2rem;
+    background-color: aqua;
+  }
+  &__button {
+    height: 56px;
+    background-color: aqua;
+  }
+}
