@@ -9,6 +9,7 @@ interface AppComponentState {
   data: ResponseResult[];
   info: InfoData | null;
   loading: boolean;
+  hasError: boolean;
 }
 
 class App extends Component {
@@ -16,6 +17,7 @@ class App extends Component {
     data: [],
     info: null,
     loading: false,
+    hasError: false,
   };
 
   handleResponse = (results: ResponseResult[], info: InfoData | null) => {
@@ -31,7 +33,16 @@ class App extends Component {
     });
   };
 
+  createError = () => {
+    this.setState({
+      hasError: true,
+    });
+  };
+
   render() {
+    if (this.state.hasError) {
+      throw new Error("It's error from click button");
+    }
     return (
       <>
         <div>
@@ -51,6 +62,11 @@ class App extends Component {
           ) : (
             <Results data={this.state.data} info={this.state.info} />
           )}
+          <div className="error-block">
+            <button className="error-block__button" onClick={this.createError}>
+              Error
+            </button>
+          </div>
         </div>
       </>
     );

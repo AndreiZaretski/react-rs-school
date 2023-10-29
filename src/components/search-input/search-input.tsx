@@ -5,12 +5,12 @@ import { API_URL } from '../../constants/request-url';
 import './search-input.scss';
 import { SearchProps } from '../../types/search-props';
 
-interface MyState {
+interface SearchState {
   input: string;
   loading: boolean;
 }
 
-class SearchInfo extends Component<SearchProps, MyState> {
+class SearchInfo extends Component<SearchProps, SearchState> {
   constructor(props: SearchProps) {
     super(props);
     this.state = {
