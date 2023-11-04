@@ -3,5 +3,5 @@ export const API_URL = {
   character: 'character/',
   name: 'name',
   page: 'page',
-  limit: 'limit',
+  limit: 'page-size',
 };

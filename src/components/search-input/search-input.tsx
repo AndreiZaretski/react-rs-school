@@ -23,11 +23,8 @@ function SearchInfo(props: SearchProps) {
     await sendRequest(input);
   };
 
-  const isResults = (data: unknown): data is ResponseResult[] => {
-    if (!Array.isArray(data)) {
-      return false;
-    }
-    return true;
+  const isValidResult = (data: unknown): data is ResponseResult[] => {
+    return Array.isArray(data);
   };
 
   const sendRequest = async (input: string) => {
@@ -38,14 +35,14 @@ function SearchInfo(props: SearchProps) {
         params: {
           [`${API_URL.name}`]: input,
           [`${API_URL.page}`]: 0,
-          [`${API_URL.limit}`]: 20,
+          [`${API_URL.limit}`]: 10,
         },
       });
 
       if (
         response.data.results &&
         response.data.info &&
-        isResults(response.data.results)
+        isValidResult(response.data.results)
       ) {
         props.onLoading(false);
         props.onResponse(response.data.results, response.data.info);

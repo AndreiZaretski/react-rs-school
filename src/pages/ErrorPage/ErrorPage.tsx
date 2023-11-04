@@ -1,5 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-import './error-page.scss';
+import './ErrorPage.scss';
 
 interface ErrorProps {
   children?: ReactNode;
@@ -10,7 +10,7 @@ interface ErrorState {
   message: string;
 }
 
-class ErrorBoundary extends Component<ErrorProps, ErrorState> {
+class ErrorPage extends Component<ErrorProps, ErrorState> {
   state: ErrorState = {
     hasError: false,
     message: '',
@@ -41,4 +41,4 @@ class ErrorBoundary extends Component<ErrorProps, ErrorState> {
   }
 }
 
-export default ErrorBoundary;
+export default ErrorPage;
