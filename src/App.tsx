@@ -8,7 +8,7 @@ import { ResponseResult, InfoData } from './types/response-interface';
 interface AppComponentState {
   data: ResponseResult[];
   info: InfoData | null;
-  loading: boolean;
+  isLoading: boolean;
   hasError: boolean;
 }
 
@@ -16,7 +16,7 @@ class App extends Component {
   state: AppComponentState = {
     data: [],
     info: null,
-    loading: false,
+    isLoading: false,
     hasError: false,
   };
 
@@ -29,7 +29,7 @@ class App extends Component {
 
   handleLoading = (loading: boolean) => {
     this.setState({
-      loading: loading,
+      isLoading: loading,
     });
   };
 
@@ -50,11 +50,12 @@ class App extends Component {
             onResponse={this.handleResponse}
             data={this.state.data}
             info={this.state.info}
+            isLoading={this.state.isLoading}
             onLoading={this.handleLoading}
           />
         </div>
         <div className="result">
-          {this.state.loading ? (
+          {this.state.isLoading ? (
             <div className="result__loading">
               <p>...Loading</p>
               <img src={reactLogo} className="logo" alt="React logo" />
