@@ -3,7 +3,12 @@ import LoadingComponent from '../../components/loadingComponent/LoadingComponent
 import Results from '../../components/result-component/result-component';
 import SearchInfo from '../../components/search-input/search-input';
 import { BeerSort } from '../../types/response-interface';
-import { Outlet, useSearchParams } from 'react-router-dom';
+import {
+  Outlet,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import './MainPage.scss';
 import axios from 'axios';
 import { API_URL, Query } from '../../constants/request-url';
@@ -20,6 +25,8 @@ const MainPage = () => {
   const [searchValue, setSearchValue] = useState(
     localStorage.getItem('searchValue') || ''
   );
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const handlePageNumber = (pageNumber: number) => {
     setPageNumber(pageNumber);
@@ -35,6 +42,13 @@ const MainPage = () => {
 
   const createError = () => {
     setHasError(true);
+  };
+
+  const goToHome = () => {
+    if (id) {
+      navigate('/');
+    }
+    return;
   };
 
   useEffect(() => {
@@ -86,7 +100,10 @@ const MainPage = () => {
         changeSearchValue={handleSearchValue}
       />
       <div className="main-page">
-        <div>
+        <div
+          className={id ? 'result-with-details' : 'result'}
+          onClick={goToHome}
+        >
           <PaginationComponent
             pageNumber={+pageNumber}
             changePage={handlePageNumber}
@@ -94,11 +111,13 @@ const MainPage = () => {
             limit={+limit}
             data={data}
           />
-          <div className="result">
+          <div>
             {isLoading ? <LoadingComponent /> : <Results data={data} />}
           </div>
         </div>
-        <Outlet />
+        <div className={id ? 'result-details' : 'result-details-none'}>
+          <Outlet />
+        </div>
       </div>
       <div className="error-block">
         <button className="error-block__button" onClick={createError}>

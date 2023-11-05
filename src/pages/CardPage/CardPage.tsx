@@ -34,30 +34,37 @@ const CardPage = () => {
 
   return (
     <div className="card-page">
-      <Link to={`/`}>Back</Link>
-      {isLoading ? (
-        <LoadingComponent />
-      ) : beer ? (
-        <div>
-          <h2>{beer.name}</h2>
-          <div className="card-page__img">
-            <img src={beer.image_url} alt={beer.name} />
+      <div className="card-page__content">
+        <Link to={`/`}>
+          <button className="card-page__button">Back</button>
+        </Link>
+        {isLoading ? (
+          <LoadingComponent />
+        ) : beer ? (
+          <>
+            <h2>{beer.name}</h2>
+            <div className="card-page__img">
+              <img src={beer.image_url} alt={beer.name} />
+            </div>
+            <p>
+              Tag: <b>{beer.tagline}</b>
+            </p>
+            <p>
+              Description: <b>{beer.description}</b>
+            </p>
+            <p>
+              Date relase: <b>{beer.first_brewed}</b>
+            </p>
+            <p>
+              Contributed: <b>{beer.contributed_by}</b>
+            </p>
+          </>
+        ) : (
+          <div className="card-page__empty">
+            No results were found for your request
           </div>
-          <p>
-            Tag: <b>{beer.tagline}</b>
-          </p>
-          <p>
-            Date relase: <b>{beer.first_brewed}</b>
-          </p>
-          <p>
-            Contributed: <b>{beer.contributed_by}</b>
-          </p>
-        </div>
-      ) : (
-        <div className="card-page__empty">
-          No results were found for your request
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

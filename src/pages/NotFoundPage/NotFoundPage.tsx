@@ -1,17 +1,11 @@
-import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const NotFoundPage = () => {
-  const [, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const goBack = () => {
-    console.log('click');
-    navigate(-1);
+    navigate('/');
   };
-  useEffect(() => {
-    setSearchParams('');
-  }, [setSearchParams]);
   return (
     <div>
       Page not found

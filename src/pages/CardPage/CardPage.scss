@@ -1,3 +1,29 @@
 .card-page {
-  width: 50%;
+  width: 100%;
+  position: relative;
+
+  &__button {
+    margin: 5px;
+    width: 90px;
+    height: 40px;
+    background-color: antiquewhite;
+  }
+
+  &__content {
+    width: 50%;
+    background-color: aquamarine;
+    position: fixed;
+    top: 88px;
+    bottom: 48px;
+    overflow: scroll;
+  }
+
+  &__img {
+    margin: 0 auto;
+    overflow: hidden;
+
+    img {
+      height: 300px;
+    }
+  }
 }

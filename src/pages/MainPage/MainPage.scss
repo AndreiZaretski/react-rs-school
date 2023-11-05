@@ -2,10 +2,42 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: burlywood;
 }
 
 .result {
   background-color: aqua;
+  width: 100%;
+}
+
+.result-with-details {
+  position: relative;
+  background-color: aqua;
+  width: 50%;
+
+  &::after {
+    position: absolute;
+    z-index: 1000;
+    top: 0px;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: rgba(90, 12, 12, 0.5);
+    cursor: pointer;
+    content: '';
+  }
+}
+
+.result-details {
+  position: relative;
+  display: block;
+  width: 50%;
+}
+
+.result-details-none {
+  width: 0;
+  display: none;
 }
 
 .error-block {

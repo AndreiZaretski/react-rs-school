@@ -19,7 +19,7 @@ const Results = (props: SearchPropsData) => {
             return (
               <Link to={`/${beer.id}`} onClick={handleClick} key={beer.id}>
                 <div className="content__item">
-                  <h2>{beer.name}</h2>
+                  <h3>{beer.name}</h3>
                   <div className="content__img">
                     <img src={beer.image_url} alt={beer.name} />
                   </div>
@@ -28,9 +28,6 @@ const Results = (props: SearchPropsData) => {
                   </p>
                   <p>
                     Date relase: <b>{beer.first_brewed}</b>
-                  </p>
-                  <p>
-                    Contributed: <b>{beer.contributed_by}</b>
                   </p>
                 </div>
               </Link>
