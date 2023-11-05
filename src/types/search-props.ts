@@ -1,12 +1,11 @@
-import { ResponseResult, InfoData } from './response-interface';
+import { BeerSort } from './response-interface';
 
 export interface SearchPropsData {
-  data: ResponseResult[];
-  info: InfoData | null;
+  data: BeerSort[];
 }
 
-export interface SearchProps extends SearchPropsData {
-  onResponse: (results: ResponseResult[], info: InfoData | null) => void;
-  onLoading: (loading: boolean) => void;
+export interface SearchProps {
   isLoading: boolean;
+  changePage: (pageNumber: number) => void;
+  changeSearchValue: (value: string) => void;
 }

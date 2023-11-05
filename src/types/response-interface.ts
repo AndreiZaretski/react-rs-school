@@ -1,32 +1,53 @@
-export interface ResponseData {
-  info: InfoData;
-  results: ResponseResult[];
-}
-
-export interface ResponseResult {
+export interface BeerSort {
   id: number;
   name: string;
-  status: string;
-  species: string;
-  type: string;
-  gender: string;
-  origin: {
-    name: string;
-    url: string;
+  tagline: string;
+  first_brewed: string;
+  description: string;
+  image_url: string;
+  abv: number;
+  ibu: number;
+  target_fg: number;
+  target_og: number;
+  ebc: number;
+  srm: number;
+  ph: number;
+  attenuation_level: number;
+  volume: Characteristic;
+  boil_volume: Characteristic;
+  method: {
+    mash_temp: [
+      {
+        temp: Characteristic;
+        duration: number;
+      },
+    ];
+    fermentation: {
+      temp: Characteristic;
+    };
+    twist: null;
   };
-  location: {
-    name: string;
-    url: string;
+  ingredients: {
+    malt: Malt[];
+    hops: Hops[];
+    yeast: string;
   };
-  image: string;
-  episode: string[];
-  url: string;
-  created: Date | string;
+  food_pairing: string[];
+  brewers_tips: string;
+  contributed_by: string;
 }
 
-export interface InfoData {
-  count: number;
-  pages: number;
-  next: string | null;
-  prev: string | null;
+interface Hops extends Malt {
+  add: string;
+  attribute: string;
+}
+
+interface Malt {
+  name: string;
+  amount: Characteristic;
+}
+
+interface Characteristic {
+  value: number;
+  unit: string;
 }

@@ -18,11 +18,22 @@
     border: 2px solid gray;
     border-radius: 10px;
     margin: 2rem;
+    width: 250px;
+    height: 460px;
   }
 
   &__info {
     padding: 2rem;
     font-weight: bold;
     text-align: right;
+  }
+
+  &__img {
+    margin: 0 auto;
+    overflow: hidden;
+
+    img {
+      height: 200px;
+    }
   }
 }

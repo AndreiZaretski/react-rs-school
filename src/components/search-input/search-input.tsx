@@ -1,56 +1,18 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { ResponseResult } from '../../types/response-interface';
-import { API_URL } from '../../constants/request-url';
+import { useState } from 'react';
 import './search-input.scss';
 import { SearchProps } from '../../types/search-props';
 
 function SearchInfo(props: SearchProps) {
   const [input, setInput] = useState(localStorage.getItem('searchValue') || '');
 
-  useEffect(() => {
-    const searchValue = input;
-    setInput(searchValue);
-    sendRequest(searchValue);
-  }, []);
-
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setInput(event.target.value);
   }
 
   const handleClick = async () => {
+    props.changePage(1);
+    props.changeSearchValue(input);
     localStorage.setItem('searchValue', input);
-    await sendRequest(input);
-  };
-
-  const isValidResult = (data: unknown): data is ResponseResult[] => {
-    return Array.isArray(data);
-  };
-
-  const sendRequest = async (input: string) => {
-    try {
-      props.onLoading(true);
-      const response = await axios({
-        url: `${API_URL.baseUrl}${API_URL.character}`,
-        params: {
-          [`${API_URL.name}`]: input,
-          [`${API_URL.page}`]: 0,
-          [`${API_URL.limit}`]: 10,
-        },
-      });
-
-      if (
-        response.data.results &&
-        response.data.info &&
-        isValidResult(response.data.results)
-      ) {
-        props.onLoading(false);
-        props.onResponse(response.data.results, response.data.info);
-      }
-    } catch (error) {
-      props.onLoading(false);
-      props.onResponse([], null);
-    }
   };
 
   return (
