@@ -1,7 +1,12 @@
 import './result-component.scss';
 import { SearchPropsData } from '../../types/search-props';
+import { Link } from 'react-router-dom';
 
 const Results = (props: SearchPropsData) => {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.stopPropagation();
+  };
+
   return (
     <div className="content">
       {props.data.length === 0 ? (
@@ -12,21 +17,23 @@ const Results = (props: SearchPropsData) => {
         <div className="content__cards">
           {props.data.map((beer) => {
             return (
-              <div className="content__item" key={beer.id}>
-                <h2>{beer.name}</h2>
-                <div className="content__img">
-                  <img src={beer.image_url} alt={beer.name} />
+              <Link to={`/${beer.id}`} onClick={handleClick} key={beer.id}>
+                <div className="content__item">
+                  <h2>{beer.name}</h2>
+                  <div className="content__img">
+                    <img src={beer.image_url} alt={beer.name} />
+                  </div>
+                  <p>
+                    Tag: <b>{beer.tagline}</b>
+                  </p>
+                  <p>
+                    Date relase: <b>{beer.first_brewed}</b>
+                  </p>
+                  <p>
+                    Contributed: <b>{beer.contributed_by}</b>
+                  </p>
                 </div>
-                <p>
-                  Tag: <b>{beer.tagline}</b>
-                </p>
-                <p>
-                  Date relase: <b>{beer.first_brewed}</b>
-                </p>
-                <p>
-                  Contributed: <b>{beer.contributed_by}</b>
-                </p>
-              </div>
+              </Link>
             );
           })}
         </div>

@@ -8,6 +8,7 @@ import './MainPage.scss';
 import axios from 'axios';
 import { API_URL, Query } from '../../constants/request-url';
 import PaginationComponent from '../../components/PaginationComponent/PaginationComponent';
+import { isValidResult } from '../../helper/checkData';
 
 const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,7 +16,7 @@ const MainPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [pageNumber, setPageNumber] = useState(searchParams.get('page') || 1);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(searchParams.get('limit') || 20);
   const [searchValue, setSearchValue] = useState(
     localStorage.getItem('searchValue') || ''
   );
@@ -41,10 +42,6 @@ const MainPage = () => {
       throw new Error("It's error from click button");
     }
   }, [hasError]);
-
-  const isValidResult = (data: unknown): data is BeerSort[] => {
-    return Array.isArray(data);
-  };
 
   useEffect(() => {
     const sendRequest = async (input: string) => {
@@ -74,8 +71,12 @@ const MainPage = () => {
 
   useEffect(() => {
     searchParams.set('page', String(pageNumber));
+    searchParams.set('limit', String(limit));
+    searchValue === ''
+      ? searchParams.delete('name')
+      : searchParams.set('name', searchValue);
     setSearchParams(searchParams);
-  }, [pageNumber, searchParams, setSearchParams]);
+  }, [pageNumber, searchParams, limit, searchValue, setSearchParams]);
 
   return (
     <>
@@ -90,7 +91,7 @@ const MainPage = () => {
             pageNumber={+pageNumber}
             changePage={handlePageNumber}
             changeLimit={handleLimit}
-            limit={limit}
+            limit={+limit}
             data={data}
           />
           <div className="result">
