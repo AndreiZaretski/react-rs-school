@@ -1,7 +1,7 @@
 import './result-component.scss';
 import { SearchPropsData } from '../../types/search-props';
 
-function Results(props: SearchPropsData) {
+const Results = (props: SearchPropsData) => {
   return (
     <div className="content">
       {props.data.length === 0 ? (
@@ -36,6 +36,6 @@ function Results(props: SearchPropsData) {
       </div>
     </div>
   );
-}
+};
 
 export default Results;

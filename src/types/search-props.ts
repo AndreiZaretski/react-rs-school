@@ -9,3 +9,11 @@ export interface SearchProps {
   changePage: (pageNumber: number) => void;
   changeSearchValue: (value: string) => void;
 }
+
+export interface Pagination {
+  changeLimit: (limit: number) => void;
+  changePage: (pageNumber: number) => void;
+  pageNumber: number;
+  limit: number;
+  data: BeerSort[];
+}

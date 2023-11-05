@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './search-input.scss';
 import { SearchProps } from '../../types/search-props';
 
-function SearchInfo(props: SearchProps) {
+const SearchInfo = (props: SearchProps) => {
   const [input, setInput] = useState(localStorage.getItem('searchValue') || '');
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -33,6 +33,6 @@ function SearchInfo(props: SearchProps) {
       </button>
     </div>
   );
-}
+};
 
 export default SearchInfo;

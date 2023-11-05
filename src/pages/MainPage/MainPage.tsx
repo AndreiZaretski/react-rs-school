@@ -3,22 +3,24 @@ import LoadingComponent from '../../components/loadingComponent/LoadingComponent
 import Results from '../../components/result-component/result-component';
 import SearchInfo from '../../components/search-input/search-input';
 import { BeerSort } from '../../types/response-interface';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useSearchParams } from 'react-router-dom';
 import './MainPage.scss';
 import axios from 'axios';
 import { API_URL, Query } from '../../constants/request-url';
+import PaginationComponent from '../../components/PaginationComponent/PaginationComponent';
 
 const MainPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [data, setData] = useState<BeerSort[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [limit /*, setLimit*/] = useState(20);
+  const [pageNumber, setPageNumber] = useState(searchParams.get('page') || 1);
+  const [limit, setLimit] = useState(20);
   const [searchValue, setSearchValue] = useState(
     localStorage.getItem('searchValue') || ''
   );
 
-  const handlePageNamber = (pageNumber: number) => {
+  const handlePageNumber = (pageNumber: number) => {
     setPageNumber(pageNumber);
   };
 
@@ -26,9 +28,9 @@ const MainPage = () => {
     setSearchValue(value);
   };
 
-  // const handleLimit = (limit: number) => {
-  //   setLimit(limit);
-  // };
+  const handleLimit = (limit: number) => {
+    setLimit(limit);
+  };
 
   const createError = () => {
     setHasError(true);
@@ -70,15 +72,27 @@ const MainPage = () => {
     sendRequest(searchValue);
   }, [pageNumber, limit, searchValue]);
 
+  useEffect(() => {
+    searchParams.set('page', String(pageNumber));
+    setSearchParams(searchParams);
+  }, [pageNumber, searchParams, setSearchParams]);
+
   return (
     <>
       <SearchInfo
         isLoading={isLoading}
-        changePage={handlePageNamber}
+        changePage={handlePageNumber}
         changeSearchValue={handleSearchValue}
       />
       <div className="main-page">
         <div>
+          <PaginationComponent
+            pageNumber={+pageNumber}
+            changePage={handlePageNumber}
+            changeLimit={handleLimit}
+            limit={limit}
+            data={data}
+          />
           <div className="result">
             {isLoading ? <LoadingComponent /> : <Results data={data} />}
           </div>
