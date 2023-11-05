@@ -94,16 +94,16 @@ const MainPage = () => {
 
   return (
     <>
-      <SearchInfo
-        isLoading={isLoading}
-        changePage={handlePageNumber}
-        changeSearchValue={handleSearchValue}
-      />
       <div className="main-page">
         <div
           className={id ? 'result-with-details' : 'result'}
           onClick={goToHome}
         >
+          <SearchInfo
+            isLoading={isLoading}
+            changePage={handlePageNumber}
+            changeSearchValue={handleSearchValue}
+          />
           <PaginationComponent
             pageNumber={+pageNumber}
             changePage={handlePageNumber}
@@ -114,15 +114,15 @@ const MainPage = () => {
           <div>
             {isLoading ? <LoadingComponent /> : <Results data={data} />}
           </div>
+          <div className="error-block">
+            <button className="error-block__button" onClick={createError}>
+              Error
+            </button>
+          </div>
         </div>
         <div className={id ? 'result-details' : 'result-details-none'}>
           <Outlet />
         </div>
-      </div>
-      <div className="error-block">
-        <button className="error-block__button" onClick={createError}>
-          Error
-        </button>
       </div>
     </>
   );
