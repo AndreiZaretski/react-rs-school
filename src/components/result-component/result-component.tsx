@@ -3,10 +3,6 @@ import { SearchPropsData } from '../../types/search-props';
 import { Link } from 'react-router-dom';
 
 const Results = (props: SearchPropsData) => {
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.stopPropagation();
-  };
-
   return (
     <div className="content">
       {props.data.length === 0 ? (
@@ -17,7 +13,7 @@ const Results = (props: SearchPropsData) => {
         <div className="content__cards">
           {props.data.map((beer) => {
             return (
-              <Link to={`/${beer.id}`} onClick={handleClick} key={beer.id}>
+              <Link to={`/${beer.id}`} key={beer.id}>
                 <div className="content__item">
                   <h3>{beer.name}</h3>
                   <div className="content__img">
