@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { BeerSort } from '../../types/response-interface';
 import './CardPage.scss';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { API_URL } from '../../constants/request-url';
 import { isValidResult } from '../../helper/checkData';
 import LoadingComponent from '../../components/loadingComponent/LoadingComponent';
@@ -12,25 +12,26 @@ const CardPage = () => {
   const [beer, setData] = useState<BeerSort | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const sendRequest = async () => {
-      try {
-        setIsLoading(true);
-        const response = await axios({
-          url: `${API_URL.baseUrl}${API_URL.endpoint}${id}`,
-        });
+  const getBeerData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios({
+        url: `${API_URL.baseUrl}${API_URL.endpoint}${id}`,
+      });
 
-        if (response.data && isValidResult(response.data)) {
-          setIsLoading(false);
-          setData(response.data[0]);
-        }
-      } catch (error) {
+      if (response.data && isValidResult(response.data)) {
         setIsLoading(false);
-        setData(null);
+        setData(response.data[0]);
       }
-    };
-    sendRequest();
+    } catch (error) {
+      setIsLoading(false);
+      setData(null);
+    }
   }, [id]);
+
+  useEffect(() => {
+    getBeerData();
+  }, [getBeerData]);
 
   return (
     <div className="card-page">

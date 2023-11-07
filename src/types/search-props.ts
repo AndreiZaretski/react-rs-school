@@ -10,7 +10,7 @@ export interface SearchProps {
   changeSearchValue: (value: string) => void;
 }
 
-export interface Pagination {
+export interface PaginationProps {
   changeLimit: (limit: number) => void;
   changePage: (pageNumber: number) => void;
   pageNumber: number;

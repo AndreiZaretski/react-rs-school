@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import LoadingComponent from '../../components/loadingComponent/LoadingComponent';
 import Results from '../../components/result-component/result-component';
 import SearchInfo from '../../components/search-input/search-input';
@@ -44,21 +44,25 @@ const MainPage = () => {
     setHasError(true);
   };
 
-  const goToHome = () => {
+  const goHome = () => {
     if (id) {
       navigate('/');
     }
     return;
   };
 
-  useEffect(() => {
+  const getError = useCallback(() => {
     if (hasError) {
       throw new Error("It's error from click button");
     }
   }, [hasError]);
 
   useEffect(() => {
-    const sendRequest = async (input: string) => {
+    getError();
+  }, [getError]);
+
+  const getBeersArray = useCallback(
+    async (input: string) => {
       try {
         setIsLoading(true);
 
@@ -79,11 +83,15 @@ const MainPage = () => {
         setIsLoading(false);
         setData([]);
       }
-    };
-    sendRequest(searchValue);
-  }, [pageNumber, limit, searchValue]);
+    },
+    [pageNumber, limit]
+  );
 
   useEffect(() => {
+    getBeersArray(searchValue);
+  }, [getBeersArray, searchValue]);
+
+  const updateSearchParams = useCallback(() => {
     searchParams.set('page', String(pageNumber));
     searchParams.set('limit', String(limit));
     searchValue === ''
@@ -92,13 +100,14 @@ const MainPage = () => {
     setSearchParams(searchParams);
   }, [pageNumber, searchParams, limit, searchValue, setSearchParams]);
 
+  useEffect(() => {
+    updateSearchParams();
+  }, [updateSearchParams]);
+
   return (
     <>
       <div className="main-page">
-        <div
-          className={id ? 'result-with-details' : 'result'}
-          onClick={goToHome}
-        >
+        <div className={id ? 'result-with-details' : 'result'} onClick={goHome}>
           <SearchInfo
             isLoading={isLoading}
             changePage={handlePageNumber}

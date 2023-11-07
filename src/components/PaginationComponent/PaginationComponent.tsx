@@ -1,12 +1,12 @@
-import { Pagination } from '../../types/search-props';
+import { PaginationProps } from '../../types/search-props';
 import styles from './PaginationComponent.module.scss';
 
-const PaginationComponent = (props: Pagination) => {
-  const nextPage = () => {
+const PaginationComponent = (props: PaginationProps) => {
+  const getNextPage = () => {
     props.changePage(props.pageNumber + 1);
   };
 
-  const prevPage = () => {
+  const getPrevPage = () => {
     props.changePage(props.pageNumber - 1);
   };
 
@@ -30,7 +30,7 @@ const PaginationComponent = (props: Pagination) => {
       <button
         className={styles.pagination_block_button}
         disabled={props.pageNumber === 1}
-        onClick={prevPage}
+        onClick={getPrevPage}
       >
         prev
       </button>
@@ -38,7 +38,7 @@ const PaginationComponent = (props: Pagination) => {
       <button
         className={styles.pagination_block_button}
         disabled={props.data.length === 0 || props.data.length < props.limit}
-        onClick={nextPage}
+        onClick={getNextPage}
       >
         next
       </button>
