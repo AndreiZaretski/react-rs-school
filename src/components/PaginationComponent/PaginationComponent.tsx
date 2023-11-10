@@ -1,18 +1,22 @@
-import { PaginationProps } from '../../types/search-props';
+import { useContext } from 'react';
 import styles from './PaginationComponent.module.scss';
+import { Context } from '../../constants/context';
 
-const PaginationComponent = (props: PaginationProps) => {
+const PaginationComponent = () => {
+  const { pageNumber, setPageNumber, setLimit, limit, data } =
+    useContext(Context);
+
   const getNextPage = () => {
-    props.changePage(props.pageNumber + 1);
+    setPageNumber(`${+pageNumber + 1}`);
   };
 
   const getPrevPage = () => {
-    props.changePage(props.pageNumber - 1);
+    setPageNumber(`${+pageNumber - 1}`);
   };
 
   const newLimit = (limit: number) => {
-    props.changeLimit(limit);
-    props.changePage(1);
+    setLimit(`${limit}`);
+    setPageNumber('1');
   };
   return (
     <div className={styles.pagination_block}>
@@ -20,7 +24,7 @@ const PaginationComponent = (props: PaginationProps) => {
       <select
         id="limit"
         className={styles.pagination_block_button}
-        value={props.limit}
+        value={limit}
         onChange={(e) => newLimit(Number(e.target.value))}
       >
         <option value="5">5</option>
@@ -29,15 +33,15 @@ const PaginationComponent = (props: PaginationProps) => {
       </select>
       <button
         className={styles.pagination_block_button}
-        disabled={props.pageNumber === 1}
+        disabled={pageNumber === '1'}
         onClick={getPrevPage}
       >
         prev
       </button>
-      <span>{props.pageNumber}</span>
+      <span>{pageNumber}</span>
       <button
         className={styles.pagination_block_button}
-        disabled={props.data.length === 0 || props.data.length < props.limit}
+        disabled={data.length === 0 || data.length < +limit}
         onClick={getNextPage}
       >
         next

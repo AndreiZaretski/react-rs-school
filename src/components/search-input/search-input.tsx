@@ -1,17 +1,19 @@
 import { useState } from 'react';
+import { useContext } from 'react';
 import './search-input.scss';
-import { SearchProps } from '../../types/search-props';
+import { Context } from '../../constants/context';
 
-const SearchInfo = (props: SearchProps) => {
+const SearchInfo = () => {
+  const { isLoading, setPageNumber, setSearchValue } = useContext(Context);
   const [input, setInput] = useState(localStorage.getItem('searchValue') || '');
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setInput(event.target.value);
   }
 
-  const handleClick = async () => {
-    props.changePage(1);
-    props.changeSearchValue(input);
+  const handleClick = () => {
+    setPageNumber('1');
+    setSearchValue(input);
     localStorage.setItem('searchValue', input);
   };
 
@@ -26,7 +28,7 @@ const SearchInfo = (props: SearchProps) => {
       <button
         type="button"
         className="search-data__button"
-        disabled={props.isLoading}
+        disabled={isLoading}
         onClick={handleClick}
       >
         Search
