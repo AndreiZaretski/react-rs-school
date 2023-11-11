@@ -34,7 +34,7 @@ const CardPage = () => {
   }, [getBeerData]);
 
   return (
-    <div className="card-page">
+    <div className="card-page" role="detail">
       <div className="card-page__content">
         <Link to={`/`}>
           <button className="card-page__button">Back</button>

@@ -8,7 +8,7 @@ const Results = () => {
   return (
     <div className="content">
       {data.length === 0 ? (
-        <div className="content__empty">
+        <div role="empty" className="content__empty">
           No results were found for your request
         </div>
       ) : (
@@ -16,7 +16,7 @@ const Results = () => {
           {data.map((beer) => {
             return (
               <Link to={`/beer/${beer.id}`} key={beer.id}>
-                <div className="content__item">
+                <div role="card" className="content__item">
                   <h3>{beer.name}</h3>
                   <div className="content__img">
                     <img src={beer.image_url} alt={beer.name} />
