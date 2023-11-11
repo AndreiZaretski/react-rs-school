@@ -4,7 +4,7 @@ const NotFoundPage = () => {
   const navigate = useNavigate();
 
   const goBack = () => {
-    navigate('/');
+    navigate('/beer');
   };
   return (
     <div>
