@@ -55,13 +55,13 @@ describe('<Results />', () => {
     });
   });
 
-  it('Validate that clicking on a card opens a detailed card component', async () => {
+  it('Validate that clicking on a card opens a detailed card component', () => {
     renderComponent(mockDataTest);
     const card = screen.getAllByRole('card');
     fireEvent.click(card[0]);
-
-    await waitFor(() => {
-      expect(<CardPage data={null} />).toBeDefined();
+    waitFor(() => {
+      const cartDetails = screen.getByRole('cartPage');
+      expect(cartDetails).toBeInTheDocument();
     });
   });
 
