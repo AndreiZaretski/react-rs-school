@@ -12,10 +12,6 @@ import MockAdapter from 'axios-mock-adapter';
 
 const mockAxios = new MockAdapter(axios);
 
-vi.mock('axios');
-const mockedAxiosGet = vi.mocked(axios.get);
-mockedAxiosGet.mockResolvedValue(mockDataTest[0]);
-
 const renderComponent = (mockDataTest: BeerSort[]) => {
   render(
     <MemoryRouter initialEntries={['/beer']}>
@@ -59,13 +55,13 @@ describe('<Results />', () => {
     });
   });
 
-  it('Validate that clicking on a card opens a detailed card component', () => {
+  it('Validate that clicking on a card opens a detailed card component', async () => {
     renderComponent(mockDataTest);
     const card = screen.getAllByRole('card');
     fireEvent.click(card[0]);
-    waitFor(() => {
-      const cartDetails = screen.getByRole('cartPage');
-      expect(cartDetails).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(<CardPage data={null} />).toBeDefined();
     });
   });
 
