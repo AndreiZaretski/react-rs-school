@@ -7,7 +7,10 @@ import { BeerSort } from '../../types/response-interface';
 import axios from 'axios';
 import '@testing-library/jest-dom';
 import { mockContext } from '../../mock/mockContext';
-//import CardPage from '../../pages/CardPage/CardPage';
+import CardPage from '../../pages/CardPage/CardPage';
+import MockAdapter from 'axios-mock-adapter';
+
+const mockAxios = new MockAdapter(axios);
 
 vi.mock('axios');
 const mockedAxiosGet = vi.mocked(axios.get);
@@ -66,23 +69,23 @@ describe('<Results />', () => {
     });
   });
 
-  // it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
-  //   renderComponent(mockDataTest);
-  //   const card = screen.getAllByRole('card');
-  //   fireEvent.click(card[0]);
-  //   render(
-  //     <MemoryRouter>
-  //       <Context.Provider value={mockContext()}>
-  //         {/* <Results /> */}
-  //         <CardPage data={null} />
-  //       </Context.Provider>
-  //     </MemoryRouter>
-  //   );
-  //   await waitFor(() => {
-  //     expect(mockedAxiosGet).toHaveBeenCalledTimes(1);
-  //     expect(mockedAxiosGet).toHaveBeenCalledWith(
-  //       'https://api.punkapi.com/v2/beers/1'
-  //     );
-  //   });
-  // });
+  it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
+    renderComponent(mockDataTest);
+    const card = screen.getAllByRole('card');
+    fireEvent.click(card[0]);
+    render(
+      <MemoryRouter initialEntries={['/beer/1']}>
+        <Context.Provider value={mockContext()}>
+          <CardPage data={null} />
+        </Context.Provider>
+      </MemoryRouter>
+    );
+
+    const spy = vi.spyOn(mockAxios, 'onGet');
+    mockAxios
+      .onGet('https://api.punkapi.com/v2/beers/1')
+      .reply(200, mockDataTest[0]);
+    expect(spy).toHaveBeenCalledTimes(1);
+    mockAxios.resetHistory();
+  });
 });

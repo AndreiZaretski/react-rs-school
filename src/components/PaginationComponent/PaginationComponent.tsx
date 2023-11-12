@@ -35,6 +35,7 @@ const PaginationComponent = () => {
         className={styles.pagination_block_button}
         disabled={pageNumber === '1'}
         onClick={getPrevPage}
+        role="prev"
       >
         prev
       </button>
@@ -43,6 +44,7 @@ const PaginationComponent = () => {
         className={styles.pagination_block_button}
         disabled={data.length === 0 || data.length < +limit}
         onClick={getNextPage}
+        role="next"
       >
         next
       </button>

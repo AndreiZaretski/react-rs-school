@@ -2,12 +2,14 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Context } from '../../constants/context';
 import { mockDataTest } from '../../mock/mock';
-import { BeerSort } from '../../types/response-interface';
 import CardPage from '../../pages/CardPage/CardPage';
 import axios from 'axios';
 import { mockContext } from '../../mock/mockContext';
+import MockAdapter from 'axios-mock-adapter';
 
-const renderComponent = (mockDataTest: BeerSort[], loading: boolean) => {
+const mockAxios = new MockAdapter(axios);
+
+const renderComponent = async (loading: boolean) => {
   render(
     <MemoryRouter initialEntries={['/beer/1']}>
       <Context.Provider value={mockContext(mockDataTest, loading)}>
@@ -17,22 +19,17 @@ const renderComponent = (mockDataTest: BeerSort[], loading: boolean) => {
   );
 };
 
-vi.mock('axios');
-const mockedAxiosGet = vi.mocked(axios.get);
-
 describe('<CardPage />', () => {
   it('Check that a loading indicator is displayed while fetching data', async () => {
-    renderComponent(mockDataTest, true);
+    renderComponent(true);
     const loading = await screen.findByRole('loading');
     expect(loading).toBeInTheDocument();
     expect(loading).toHaveTextContent('...Loading');
   });
 
   it('Make sure the detailed card component correctly displays the detailed card data', async () => {
-    renderComponent(mockDataTest, false);
-    mockedAxiosGet.mockResolvedValue(mockDataTest[0]);
+    renderComponent(false);
     const detail = await screen.findByRole('detail');
-    console.log(detail);
     waitFor(() => {
       expect(detail).toBeInTheDocument();
       expect(detail).toHaveTextContent(mockDataTest[0].name);
@@ -47,7 +44,7 @@ describe('<CardPage />', () => {
   });
 
   it('Ensure that clicking the close button hides the component', async () => {
-    renderComponent(mockDataTest, false);
+    renderComponent(false);
 
     const button = screen.getByRole('buttonLink');
     fireEvent.click(button);
@@ -56,5 +53,15 @@ describe('<CardPage />', () => {
     waitFor(() => {
       expect(detail).not.toBeInTheDocument();
     });
+  });
+
+  it('Shold be send request', async () => {
+    const spy = vi.spyOn(mockAxios, 'onGet');
+    mockAxios
+      .onGet('https://api.punkapi.com/v2/beers/1')
+      .reply(200, mockDataTest[0]);
+    renderComponent(false);
+    expect(spy).toHaveBeenCalled();
+    mockAxios.resetHistory();
   });
 });

@@ -5,41 +5,19 @@ import { Context } from '../../constants/context';
 import { mockContext } from '../../mock/mockContext';
 
 describe('<PaginationComponent />', () => {
-  const RenderPagination = (props: {
-    pageNumber: string;
-    setPageNumber: (value: string) => void;
-    limit: string;
-    setLimit: (value: string) => void;
-  }) => {
-    const { pageNumber, setPageNumber, limit, setLimit } = props;
+  const renderPagination = () => {
     return render(
       <MemoryRouter initialEntries={['/beer?page=1']}>
-        <Context.Provider
-          value={mockContext(
-            [],
-            false,
-            pageNumber,
-            setPageNumber,
-            limit,
-            setLimit
-          )}
-        >
+        <Context.Provider value={mockContext()}>
           <PaginationComponent />
         </Context.Provider>
       </MemoryRouter>
     );
   };
 
-  let pageNumber = '1';
-  let limit = '20';
-  const setPageNumber = (value: string) => {
-    pageNumber = value;
-  };
-  const setLimit = (value: string) => {
-    limit = value;
-  };
+  const pageNumber = '1';
   it('Make sure the component updates URL query parameter when page changes', () => {
-    RenderPagination({ pageNumber, setPageNumber, limit, setLimit });
+    renderPagination();
     const nextButton = screen.getByText('next');
     fireEvent.click(nextButton);
     waitFor(() => {
@@ -55,7 +33,7 @@ describe('<PaginationComponent />', () => {
   });
 
   it('should be ?page=1 after change select active', () => {
-    RenderPagination({ pageNumber, setPageNumber, limit, setLimit });
+    renderPagination();
     const nextButton = screen.getByText('next');
     fireEvent.click(nextButton);
     waitFor(() => {
@@ -70,5 +48,13 @@ describe('<PaginationComponent />', () => {
       expect(window.location.search).toBe('?limit=10');
       expect(select).toHaveValue('10');
     });
+  });
+
+  it('should disable prev button on first page and next button on last page', () => {
+    renderPagination();
+    const prevButton = screen.getByRole('prev');
+    const nextButton = screen.getByRole('next');
+    expect(prevButton).toBeDisabled();
+    expect(nextButton).toBeDisabled();
   });
 });
