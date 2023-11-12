@@ -1,5 +1,5 @@
 import './App.scss';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import MainPage from './pages/MainPage/MainPage';
 import CardPage from './pages/CardPage/CardPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
@@ -9,8 +9,9 @@ const App = () => {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<MainPage />}>
-            <Route path=":id" element={<CardPage />} />
+          <Route path="/" element={<Navigate replace to="beer" />} />
+          <Route path="/beer" element={<MainPage />}>
+            <Route path=":id" element={<CardPage data={null} />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

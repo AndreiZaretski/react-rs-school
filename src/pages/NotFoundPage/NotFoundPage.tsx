@@ -4,12 +4,14 @@ const NotFoundPage = () => {
   const navigate = useNavigate();
 
   const goBack = () => {
-    navigate('/');
+    navigate('/beer');
   };
   return (
     <div>
       Page not found
-      <button onClick={goBack}>Back</button>
+      <button onClick={goBack} role="back">
+        Back
+      </button>
     </div>
   );
 };
