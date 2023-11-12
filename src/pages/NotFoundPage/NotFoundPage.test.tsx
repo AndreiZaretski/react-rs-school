@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import NotFoundPage from './NotFoundPage';
 
-describe('Test Not Found Page', () => {
+describe('<NotFoundPage />', () => {
   it('Should be defined', () => {
     expect(<NotFoundPage />).toBeDefined();
   });
@@ -17,5 +17,20 @@ describe('Test Not Found Page', () => {
     expect(screen.getByText('Back')).toBeInTheDocument();
   });
 
-  it('Should be navigate a the beer page after click', () => {});
+  it('Should be navigate a the beer page after click', () => {
+    render(
+      <MemoryRouter initialEntries={['/foo']}>
+        <NotFoundPage />
+      </MemoryRouter>
+    );
+
+    const buttonBack = screen.getByRole('back');
+    fireEvent.click(buttonBack);
+
+    const notFountPage = screen.getByText('Page not found');
+
+    waitFor(() => {
+      expect(notFountPage).not.toBeInTheDocument();
+    });
+  });
 });

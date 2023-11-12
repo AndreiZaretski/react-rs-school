@@ -1,30 +1,22 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Context } from '../../constants/context';
 import Results from './result-component';
 import { mockDataTest } from '../../mock/mock';
 import { BeerSort } from '../../types/response-interface';
-import CardPage from '../../pages/CardPage/CardPage';
+import axios from 'axios';
+import '@testing-library/jest-dom';
+import { mockContext } from '../../mock/mockContext';
+//import CardPage from '../../pages/CardPage/CardPage';
+
+vi.mock('axios');
+const mockedAxiosGet = vi.mocked(axios.get);
+mockedAxiosGet.mockResolvedValue(mockDataTest[0]);
 
 const renderComponent = (mockDataTest: BeerSort[]) => {
   render(
-    <MemoryRouter>
-      <Context.Provider
-        value={{
-          setData: () => {},
-          isLoading: false,
-          setIsLoading: () => {},
-          hasError: false,
-          setHasError: () => {},
-          pageNumber: '1',
-          setPageNumber: () => {},
-          limit: '20',
-          setLimit: () => {},
-          searchValue: '',
-          setSearchValue: () => {},
-          data: mockDataTest,
-        }}
-      >
+    <MemoryRouter initialEntries={['/beer']}>
+      <Context.Provider value={mockContext(mockDataTest)}>
         <Results />
       </Context.Provider>
     </MemoryRouter>
@@ -32,7 +24,7 @@ const renderComponent = (mockDataTest: BeerSort[]) => {
 };
 
 describe('<Results />', () => {
-  it('renders the specified number of cards', () => {
+  it('Verify that the component renders the specified number of cards', () => {
     renderComponent(mockDataTest);
 
     const cards = screen.getAllByRole('card');
@@ -40,7 +32,7 @@ describe('<Results />', () => {
     expect(cards).toHaveLength(2);
   });
 
-  it('shows an appropriate message if no cards are present', () => {
+  it('Check that an appropriate message is displayed if no cards are present', () => {
     renderComponent([]);
 
     const message = screen.getByRole('empty');
@@ -50,7 +42,7 @@ describe('<Results />', () => {
     );
   });
 
-  it('displays relevant card details', () => {
+  it('Ensure that the card component renders the relevant card data', () => {
     renderComponent(mockDataTest);
 
     const cards = screen.getAllByRole('card');
@@ -64,10 +56,33 @@ describe('<Results />', () => {
     });
   });
 
-  it('opens a detailed card when you click on the card', () => {
+  it('Validate that clicking on a card opens a detailed card component', async () => {
     renderComponent(mockDataTest);
     const card = screen.getAllByRole('card');
     fireEvent.click(card[0]);
-    expect(<CardPage />).toBeDefined();
+    waitFor(() => {
+      const cartDetails = screen.getByRole('cartPage');
+      expect(cartDetails).toBeInTheDocument();
+    });
   });
+
+  // it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
+  //   renderComponent(mockDataTest);
+  //   const card = screen.getAllByRole('card');
+  //   fireEvent.click(card[0]);
+  //   render(
+  //     <MemoryRouter>
+  //       <Context.Provider value={mockContext()}>
+  //         {/* <Results /> */}
+  //         <CardPage data={null} />
+  //       </Context.Provider>
+  //     </MemoryRouter>
+  //   );
+  //   await waitFor(() => {
+  //     expect(mockedAxiosGet).toHaveBeenCalledTimes(1);
+  //     expect(mockedAxiosGet).toHaveBeenCalledWith(
+  //       'https://api.punkapi.com/v2/beers/1'
+  //     );
+  //   });
+  // });
 });

@@ -11,7 +11,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Navigate replace to="beer" />} />
           <Route path="/beer" element={<MainPage />}>
-            <Route path=":id" element={<CardPage />} />
+            <Route path=":id" element={<CardPage data={null} />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

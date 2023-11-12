@@ -125,7 +125,6 @@ export const mockDataTest: BeerSort[] = [
       'The earthy and floral aromas from the hops can be overpowering. Drop a little Cascade in at the end of the boil to lift the profile with a bit of citrus.',
     contributed_by: 'Sam Mason <samjbmason>',
   },
-  // Второй элемент - объект с данными о пиве
   {
     id: 2,
     name: 'Trashy Blonde',

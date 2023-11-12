@@ -112,7 +112,7 @@ const MainPage = () => {
           setSearchValue,
         }}
       >
-        <div className="main-page">
+        <div className="main-page" role="mainPage">
           <div
             className={id ? 'result-with-details' : 'result'}
             onClick={goHome}

@@ -24,6 +24,7 @@ const SearchInfo = () => {
         className="search-data__input"
         value={input}
         onChange={handleChange}
+        role="input"
       />
       <button
         type="button"

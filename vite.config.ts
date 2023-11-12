@@ -19,6 +19,8 @@ export default defineConfig({
         'src/types/*',
         'src/constants/*',
         '**/*.d.ts ',
+        'src/mock/*',
+        'src/main.tsx',
       ],
     },
   },

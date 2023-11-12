@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import { BeerSort } from '../types/response-interface';
 
-export interface ContextType {
+export interface BeerContextType {
   data: BeerSort[];
   setData: (data: BeerSort[]) => void;
   isLoading: boolean;
@@ -16,7 +16,7 @@ export interface ContextType {
   setSearchValue: (searchValue: string) => void;
 }
 
-export const Context = createContext<ContextType>({
+export const Context = createContext<BeerContextType>({
   data: [],
   setData: () => {},
   isLoading: false,
