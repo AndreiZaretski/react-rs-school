@@ -16,14 +16,14 @@ describe('<SearchInfo />', () => {
     localStorage.clear();
   });
 
-  it('retrieves the value from the local storage upon mounting', () => {
+  it('Check that the component retrieves the value from the local storage upon mounting', () => {
     localStorage.setItem('searchValue', 'test');
     renderInput();
     const input = screen.getByRole('input');
     expect(input).toHaveValue('test');
   });
 
-  it('saves the entered value to the local storage upon clicking the Search button', () => {
+  it('Verify that clicking the Search button saves the entered value to the local storage', () => {
     renderInput();
 
     const input = screen.getByRole('input');

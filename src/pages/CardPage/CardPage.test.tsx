@@ -3,11 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { Context } from '../../constants/context';
 import { mockDataTest } from '../../mock/mock';
 import CardPage from '../../pages/CardPage/CardPage';
-import axios from 'axios';
 import { mockContext } from '../../mock/mockContext';
-import MockAdapter from 'axios-mock-adapter';
-
-const mockAxios = new MockAdapter(axios);
 
 const renderComponent = async (loading: boolean) => {
   render(
@@ -53,15 +49,5 @@ describe('<CardPage />', () => {
     waitFor(() => {
       expect(detail).not.toBeInTheDocument();
     });
-  });
-
-  it('Shold be send request', async () => {
-    const spy = vi.spyOn(mockAxios, 'onGet');
-    mockAxios
-      .onGet('https://api.punkapi.com/v2/beers/1')
-      .reply(200, mockDataTest[0]);
-    renderComponent(false);
-    expect(spy).toHaveBeenCalled();
-    mockAxios.resetHistory();
   });
 });

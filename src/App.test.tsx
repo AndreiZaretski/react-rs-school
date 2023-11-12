@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-describe('App component', () => {
+describe('<App />', () => {
   it('renders App component', () => {
     render(<App />);
     expect(screen.getByRole('mainPage')).toBeInTheDocument();
