@@ -1,8 +1,15 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import PaginationComponent from './PaginationComponent';
 import { Context } from '../../constants/context';
 import { mockContext } from '../../mock/mockContext';
+import { userEvent } from '@testing-library/user-event';
 
 describe('<PaginationComponent />', () => {
   const renderPagination = () => {
@@ -15,19 +22,22 @@ describe('<PaginationComponent />', () => {
     );
   };
 
+  userEvent.setup();
+
   const pageNumber = '1';
-  it('Make sure the component updates URL query parameter when page changes', () => {
+  it('Make sure the component updates URL query parameter when page changes', async () => {
     renderPagination();
-    const nextButton = screen.getByText('next');
-    fireEvent.click(nextButton);
+    const nextButton = screen.getByRole('next');
+    await act(async () => await userEvent.click(nextButton));
     waitFor(() => {
-      expect(window.location.search).toBe('?page=2');
+      console.log('LOCATIONNN', location.search);
+      expect(location.search).toBe('?page=2');
       expect(pageNumber).toBe('2');
     });
     const prevButton = screen.getByText('prev');
     fireEvent.click(prevButton);
     waitFor(() => {
-      expect(window.location.search).toBe('?page=1');
+      expect(location.search).toBe('?page=1');
       expect(pageNumber).toBe('1');
     });
   });

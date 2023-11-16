@@ -15,17 +15,24 @@ import PaginationComponent from '../../components/PaginationComponent/Pagination
 import { isValidResult } from '../../helper/checkData';
 import { Context } from '../../constants/context';
 import { BeerSort } from '../../types/response-interface';
+import { useSelector } from 'react-redux';
+import { AppState } from '../../redux/store/store';
 
 const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [data, setData] = useState<BeerSort[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [pageNumber, setPageNumber] = useState(searchParams.get('page') || '1');
-  const [limit, setLimit] = useState(searchParams.get('limit') || '20');
-  const [searchValue, setSearchValue] = useState(
-    localStorage.getItem('searchValue') || ''
+
+  const searchValue = useSelector(
+    (state: AppState) => state.searchParams.searchValue
   );
+
+  const pageNumber = useSelector(
+    (state: AppState) => state.searchParams.pageNumber
+  );
+
+  const limit = useSelector((state: AppState) => state.searchParams.limit);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -104,12 +111,6 @@ const MainPage = () => {
           setIsLoading,
           hasError,
           setHasError,
-          pageNumber,
-          setPageNumber,
-          limit,
-          setLimit,
-          searchValue,
-          setSearchValue,
         }}
       >
         <div className="main-page" role="mainPage">

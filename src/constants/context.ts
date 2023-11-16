@@ -8,12 +8,6 @@ export interface BeerContextType {
   setIsLoading: (isLoading: boolean) => void;
   hasError: boolean;
   setHasError: (hasError: boolean) => void;
-  pageNumber: string;
-  setPageNumber: (pageNumber: string) => void;
-  limit: string;
-  setLimit: (limit: string) => void;
-  searchValue: string;
-  setSearchValue: (searchValue: string) => void;
 }
 
 export const Context = createContext<BeerContextType>({
@@ -23,10 +17,4 @@ export const Context = createContext<BeerContextType>({
   setIsLoading: () => {},
   hasError: false,
   setHasError: () => {},
-  pageNumber: '1',
-  setPageNumber: () => {},
-  limit: '20',
-  setLimit: () => {},
-  searchValue: '',
-  setSearchValue: () => {},
 });

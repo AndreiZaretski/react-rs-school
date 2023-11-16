@@ -1,22 +1,32 @@
 import { useContext } from 'react';
 import styles from './PaginationComponent.module.scss';
 import { Context } from '../../constants/context';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPageNumber, setLimit } from '../../redux/features/searchSlice';
+import { AppState } from '../../redux/store/store';
+import { Page_Number_Default } from '../../constants/searchParam';
 
 const PaginationComponent = () => {
-  const { pageNumber, setPageNumber, setLimit, limit, data } =
-    useContext(Context);
+  const dispatch = useDispatch();
+  const { data } = useContext(Context);
+
+  const pageNumber = useSelector(
+    (state: AppState) => state.searchParams.pageNumber
+  );
+
+  const limit = useSelector((state: AppState) => state.searchParams.limit);
 
   const getNextPage = () => {
-    setPageNumber(`${+pageNumber + 1}`);
+    dispatch(setPageNumber(pageNumber + 1));
   };
 
   const getPrevPage = () => {
-    setPageNumber(`${+pageNumber - 1}`);
+    dispatch(setPageNumber(pageNumber - 1));
   };
 
-  const newLimit = (limit: number) => {
-    setLimit(`${limit}`);
-    setPageNumber('1');
+  const newLimit = (limit: string) => {
+    dispatch(setPageNumber(Page_Number_Default));
+    dispatch(setLimit(limit));
   };
   return (
     <div className={styles.pagination_block}>
@@ -25,7 +35,7 @@ const PaginationComponent = () => {
         id="limit"
         className={styles.pagination_block_button}
         value={limit}
-        onChange={(e) => newLimit(Number(e.target.value))}
+        onChange={(e) => newLimit(e.target.value)}
       >
         <option value="5">5</option>
         <option value="10">10</option>
@@ -33,7 +43,7 @@ const PaginationComponent = () => {
       </select>
       <button
         className={styles.pagination_block_button}
-        disabled={pageNumber === '1'}
+        disabled={pageNumber === Page_Number_Default}
         onClick={getPrevPage}
         role="prev"
       >
