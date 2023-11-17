@@ -1,13 +1,13 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Context } from '../../constants/context';
 import SearchInfo from './search-input';
-import { mockContext } from '../../mock/mockContext';
+import { store } from '../../redux/store/store';
+import { Provider } from 'react-redux';
 
 const renderInput = () => {
   render(
-    <Context.Provider value={mockContext()}>
+    <Provider store={store}>
       <SearchInfo />
-    </Context.Provider>
+    </Provider>
   );
 };
 

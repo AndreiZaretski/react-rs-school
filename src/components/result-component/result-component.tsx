@@ -1,13 +1,36 @@
 import './result-component.scss';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
-import { Context } from '../../constants/context';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppState } from '../../redux/store/store';
+import { useGetBeersArrayQuery } from '../../redux/api/beerApi';
+import LoadingComponent from '../loadingComponent/LoadingComponent';
+import { setLengthValue } from '../../redux/features/dataLengthSlice';
+import { setLoadingValue } from '../../redux/features/isLoading';
+import { useCallback, useEffect } from 'react';
 
 const Results = () => {
-  const { data } = useContext(Context);
-  return (
+  const dispatch = useDispatch();
+  const searchParams = useSelector((state: AppState) => state.searchParams);
+
+  const { data, error, isLoading } = useGetBeersArrayQuery(searchParams);
+
+  const dispatchLoading = useCallback(() => {
+    if (data) {
+      dispatch(setLengthValue(data.length));
+    }
+
+    dispatch(setLoadingValue(isLoading));
+  }, [data, dispatch, isLoading]);
+
+  useEffect(() => {
+    dispatchLoading();
+  }, [dispatchLoading]);
+
+  return isLoading ? (
+    <LoadingComponent />
+  ) : (
     <div className="content">
-      {data.length === 0 ? (
+      {error || !data || data.length === 0 ? (
         <div role="empty" className="content__empty">
           No results were found for your request
         </div>
@@ -34,7 +57,7 @@ const Results = () => {
         </div>
       )}
       <div className="content__info">
-        {data.length} of {325} shown
+        {data ? data.length : 0} of {325} shown
       </div>
     </div>
   );

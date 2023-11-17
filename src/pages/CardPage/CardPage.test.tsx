@@ -1,30 +1,30 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { Context } from '../../constants/context';
 import { mockDataTest } from '../../mock/mock';
 import CardPage from '../../pages/CardPage/CardPage';
-import { mockContext } from '../../mock/mockContext';
+import { Provider } from 'react-redux';
+import { store } from '../../redux/store/store';
 
-const renderComponent = async (loading: boolean) => {
+const renderComponent = async () => {
   render(
-    <MemoryRouter initialEntries={['/beer/1']}>
-      <Context.Provider value={mockContext(mockDataTest, loading)}>
-        <CardPage data={mockDataTest[0]} />
-      </Context.Provider>
-    </MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter initialEntries={['/beer/1']}>
+        <CardPage />
+      </MemoryRouter>
+    </Provider>
   );
 };
 
 describe('<CardPage />', () => {
   it('Check that a loading indicator is displayed while fetching data', async () => {
-    renderComponent(true);
+    renderComponent();
     const loading = await screen.findByRole('loading');
     expect(loading).toBeInTheDocument();
     expect(loading).toHaveTextContent('...Loading');
   });
 
   it('Make sure the detailed card component correctly displays the detailed card data', async () => {
-    renderComponent(false);
+    renderComponent();
     const detail = await screen.findByRole('detail');
     waitFor(() => {
       expect(detail).toBeInTheDocument();
@@ -40,7 +40,7 @@ describe('<CardPage />', () => {
   });
 
   it('Ensure that clicking the close button hides the component', async () => {
-    renderComponent(false);
+    renderComponent();
 
     const button = screen.getByRole('buttonLink');
     fireEvent.click(button);

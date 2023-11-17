@@ -1,6 +1,4 @@
-import { useContext } from 'react';
 import styles from './PaginationComponent.module.scss';
-import { Context } from '../../constants/context';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPageNumber, setLimit } from '../../redux/features/searchSlice';
 import { AppState } from '../../redux/store/store';
@@ -8,13 +6,11 @@ import { Page_Number_Default } from '../../constants/searchParam';
 
 const PaginationComponent = () => {
   const dispatch = useDispatch();
-  const { data } = useContext(Context);
+  const { dataLength } = useSelector((state: AppState) => state.dataLength);
 
-  const pageNumber = useSelector(
-    (state: AppState) => state.searchParams.pageNumber
+  const { pageNumber, limit } = useSelector(
+    (state: AppState) => state.searchParams
   );
-
-  const limit = useSelector((state: AppState) => state.searchParams.limit);
 
   const getNextPage = () => {
     dispatch(setPageNumber(pageNumber + 1));
@@ -52,7 +48,7 @@ const PaginationComponent = () => {
       <span>{pageNumber}</span>
       <button
         className={styles.pagination_block_button}
-        disabled={data.length === 0 || data.length < +limit}
+        disabled={dataLength === 0 || dataLength < +limit}
         onClick={getNextPage}
         role="next"
       >

@@ -7,18 +7,19 @@ import {
 } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import PaginationComponent from './PaginationComponent';
-import { Context } from '../../constants/context';
-import { mockContext } from '../../mock/mockContext';
+
 import { userEvent } from '@testing-library/user-event';
+import { Provider } from 'react-redux';
+import { store } from '../../redux/store/store';
 
 describe('<PaginationComponent />', () => {
   const renderPagination = () => {
     return render(
-      <MemoryRouter initialEntries={['/beer?page=1']}>
-        <Context.Provider value={mockContext()}>
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/beer?page=1']}>
           <PaginationComponent />
-        </Context.Provider>
-      </MemoryRouter>
+        </MemoryRouter>
+      </Provider>
     );
   };
 

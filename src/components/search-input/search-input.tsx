@@ -1,16 +1,15 @@
 import { useState } from 'react';
-import { useContext } from 'react';
 import './search-input.scss';
-import { Context } from '../../constants/context';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setPageNumber,
   setSearchValue,
 } from '../../redux/features/searchSlice';
 import { Page_Number_Default } from '../../constants/searchParam';
+import { AppState } from '../../redux/store/store';
 
 const SearchInfo = () => {
-  const { isLoading } = useContext(Context);
+  const isLoading = useSelector((state: AppState) => state.isLoading.isLoading);
   const dispatch = useDispatch();
   const [input, setInput] = useState(localStorage.getItem('searchValue') || '');
 

@@ -24,7 +24,7 @@ const App = () => {
             >
               <Route
                 path=":id"
-                element={<CardPage data={null} />}
+                element={<CardPage />}
                 errorElement={<NotFoundPage />}
               />
             </Route>

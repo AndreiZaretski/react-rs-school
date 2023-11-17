@@ -1,30 +1,29 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { Context } from '../../constants/context';
 import Results from './result-component';
 import { mockDataTest } from '../../mock/mock';
-import { BeerSort } from '../../types/response-interface';
 import axios from 'axios';
 import '@testing-library/jest-dom';
-import { mockContext } from '../../mock/mockContext';
 import CardPage from '../../pages/CardPage/CardPage';
 import MockAdapter from 'axios-mock-adapter';
+import { Provider } from 'react-redux';
+import { store } from '../../redux/store/store';
 
 const mockAxios = new MockAdapter(axios);
 
-const renderComponent = (mockDataTest: BeerSort[]) => {
+const renderComponent = () => {
   render(
-    <MemoryRouter initialEntries={['/beer']}>
-      <Context.Provider value={mockContext(mockDataTest)}>
+    <Provider store={store}>
+      <MemoryRouter initialEntries={['/beer']}>
         <Results />
-      </Context.Provider>
-    </MemoryRouter>
+      </MemoryRouter>
+    </Provider>
   );
 };
 
 describe('<Results />', () => {
   it('Verify that the component renders the specified number of cards', () => {
-    renderComponent(mockDataTest);
+    renderComponent();
 
     const cards = screen.getAllByRole('card');
 
@@ -32,7 +31,7 @@ describe('<Results />', () => {
   });
 
   it('Check that an appropriate message is displayed if no cards are present', () => {
-    renderComponent([]);
+    renderComponent();
 
     const message = screen.getByRole('empty');
 
@@ -42,7 +41,7 @@ describe('<Results />', () => {
   });
 
   it('Ensure that the card component renders the relevant card data', () => {
-    renderComponent(mockDataTest);
+    renderComponent();
 
     const cards = screen.getAllByRole('card');
 
@@ -56,7 +55,7 @@ describe('<Results />', () => {
   });
 
   it('Validate that clicking on a card opens a detailed card component', () => {
-    renderComponent(mockDataTest);
+    renderComponent();
     const card = screen.getAllByRole('card');
     fireEvent.click(card[0]);
     waitFor(() => {
@@ -66,15 +65,15 @@ describe('<Results />', () => {
   });
 
   it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
-    renderComponent(mockDataTest);
+    renderComponent();
     const card = screen.getAllByRole('card');
     fireEvent.click(card[0]);
     render(
-      <MemoryRouter initialEntries={['/beer/1']}>
-        <Context.Provider value={mockContext()}>
-          <CardPage data={null} />
-        </Context.Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/beer/1']}>
+          <CardPage />
+        </MemoryRouter>
+      </Provider>
     );
 
     const spy = vi.spyOn(mockAxios, 'onGet');
