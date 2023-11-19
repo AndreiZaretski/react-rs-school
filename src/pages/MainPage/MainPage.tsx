@@ -1,5 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
-import LoadingComponent from '../../components/loadingComponent/LoadingComponent';
+import { useEffect, useCallback } from 'react';
 import Results from '../../components/result-component/result-component';
 import SearchInfo from '../../components/search-input/search-input';
 import {
@@ -9,29 +8,23 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 import './MainPage.scss';
-import axios from 'axios';
-import { API_URL, Query } from '../../constants/request-url';
 import PaginationComponent from '../../components/PaginationComponent/PaginationComponent';
-import { isValidResult } from '../../helper/checkData';
-import { Context } from '../../constants/context';
-import { BeerSort } from '../../types/response-interface';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppState } from '../../redux/store/store';
+import { setHasError } from '../../redux/features/errorSlice';
 
 const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [data, setData] = useState<BeerSort[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [pageNumber, setPageNumber] = useState(searchParams.get('page') || '1');
-  const [limit, setLimit] = useState(searchParams.get('limit') || '20');
-  const [searchValue, setSearchValue] = useState(
-    localStorage.getItem('searchValue') || ''
-  );
+  const dispatch = useDispatch();
+  const hasError = useSelector((state: AppState) => state.error.hasError);
+
+  const { searchValue } = useSelector((state: AppState) => state.searchParams);
 
   const { id } = useParams();
   const navigate = useNavigate();
 
   const createError = () => {
-    setHasError(true);
+    dispatch(setHasError());
   };
 
   const goHome = () => {
@@ -51,44 +44,12 @@ const MainPage = () => {
     getError();
   }, [getError]);
 
-  const getBeersArray = useCallback(
-    async (input: string) => {
-      try {
-        setIsLoading(true);
-
-        const response = await axios({
-          url: `${API_URL.baseUrl}${API_URL.endpoint}`,
-          params: {
-            ...(input && { [Query.Name]: input }),
-            [Query.Page]: pageNumber,
-            [Query.Limit]: limit,
-          },
-        });
-
-        if (response.data && isValidResult(response.data)) {
-          setIsLoading(false);
-          setData(response.data);
-        }
-      } catch (error) {
-        setIsLoading(false);
-        setData([]);
-      }
-    },
-    [setIsLoading, pageNumber, limit, setData]
-  );
-
-  useEffect(() => {
-    getBeersArray(searchValue);
-  }, [getBeersArray, searchValue]);
-
   const updateSearchParams = useCallback(() => {
-    searchParams.set('page', String(pageNumber));
-    searchParams.set('limit', String(limit));
     searchValue === ''
       ? searchParams.delete('name')
       : searchParams.set('name', searchValue);
     setSearchParams(searchParams);
-  }, [pageNumber, searchParams, limit, searchValue, setSearchParams]);
+  }, [searchParams, searchValue, setSearchParams]);
 
   useEffect(() => {
     updateSearchParams();
@@ -96,41 +57,23 @@ const MainPage = () => {
 
   return (
     <>
-      <Context.Provider
-        value={{
-          data,
-          setData,
-          isLoading,
-          setIsLoading,
-          hasError,
-          setHasError,
-          pageNumber,
-          setPageNumber,
-          limit,
-          setLimit,
-          searchValue,
-          setSearchValue,
-        }}
-      >
-        <div className="main-page" role="mainPage">
-          <div
-            className={id ? 'result-with-details' : 'result'}
-            onClick={goHome}
-          >
-            <SearchInfo />
-            <PaginationComponent />
-            <div>{isLoading ? <LoadingComponent /> : <Results />}</div>
-            <div className="error-block">
-              <button className="error-block__button" onClick={createError}>
-                Error
-              </button>
-            </div>
+      <div className="main-page" role="mainPage">
+        <div className={id ? 'result-with-details' : 'result'} onClick={goHome}>
+          <SearchInfo />
+          <PaginationComponent />
+          <div>
+            <Results />
           </div>
-          <div className={id ? 'result-details' : 'result-details-none'}>
-            <Outlet />
+          <div className="error-block">
+            <button className="error-block__button" onClick={createError}>
+              Error
+            </button>
           </div>
         </div>
-      </Context.Provider>
+        <div className={id ? 'result-details' : 'result-details-none'}>
+          <Outlet />
+        </div>
+      </div>
     </>
   );
 };

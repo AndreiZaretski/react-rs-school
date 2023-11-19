@@ -1,32 +1,45 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { Context } from '../../constants/context';
 import { mockDataTest } from '../../mock/mock';
 import CardPage from '../../pages/CardPage/CardPage';
-import { mockContext } from '../../mock/mockContext';
+import { Provider } from 'react-redux';
+import { store } from '../../redux/store/store';
+import { mockBeerServer } from '../../mock/mockBeerServer';
 
-const renderComponent = async (loading: boolean) => {
+vi.mock('react-router-dom', () => {
+  const router = require('react-router-dom');
+  return {
+    ...router,
+    useParams: () => ({ id: '1' }),
+  };
+});
+
+const renderComponent = () => {
   render(
-    <MemoryRouter initialEntries={['/beer/1']}>
-      <Context.Provider value={mockContext(mockDataTest, loading)}>
-        <CardPage data={mockDataTest[0]} />
-      </Context.Provider>
-    </MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter initialEntries={['/1']} initialIndex={0}>
+        <CardPage />
+      </MemoryRouter>
+    </Provider>
   );
 };
 
 describe('<CardPage />', () => {
+  beforeAll(() => mockBeerServer.listen());
+  afterEach(() => mockBeerServer.resetHandlers());
+  afterAll(() => mockBeerServer.close());
+
   it('Check that a loading indicator is displayed while fetching data', async () => {
-    renderComponent(true);
+    renderComponent();
     const loading = await screen.findByRole('loading');
     expect(loading).toBeInTheDocument();
     expect(loading).toHaveTextContent('...Loading');
   });
 
   it('Make sure the detailed card component correctly displays the detailed card data', async () => {
-    renderComponent(false);
+    renderComponent();
     const detail = await screen.findByRole('detail');
-    waitFor(() => {
+    await waitFor(() => {
       expect(detail).toBeInTheDocument();
       expect(detail).toHaveTextContent(mockDataTest[0].name);
       expect(detail).toHaveTextContent(mockDataTest[0].tagline);
@@ -40,7 +53,7 @@ describe('<CardPage />', () => {
   });
 
   it('Ensure that clicking the close button hides the component', async () => {
-    renderComponent(false);
+    renderComponent();
 
     const button = screen.getByRole('buttonLink');
     fireEvent.click(button);

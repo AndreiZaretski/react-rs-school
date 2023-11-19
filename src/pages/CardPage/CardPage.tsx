@@ -1,70 +1,53 @@
 import { Link, useParams } from 'react-router-dom';
-import { BeerSort } from '../../types/response-interface';
 import './CardPage.scss';
-import axios from 'axios';
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { API_URL } from '../../constants/request-url';
-import { isValidResult } from '../../helper/checkData';
 import LoadingComponent from '../../components/loadingComponent/LoadingComponent';
-import { Context } from '../../constants/context';
+import { useGetBeerByIdQuery } from '../../redux/api/beerApi';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useCallback, useEffect } from 'react';
+import { setLoadingValue } from '../../redux/features/isLoading';
+import { useDispatch } from 'react-redux';
 
-export interface CardPageProps {
-  data: BeerSort | null;
-}
-const CardPage = (data: CardPageProps) => {
+const CardPage = () => {
+  const dispatch = useDispatch();
   const { id } = useParams();
-  const [beer, setData] = useState<BeerSort | null>(data.data);
-  const { isLoading, setIsLoading } = useContext(Context);
 
-  const getBeerData = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios({
-        url: `${API_URL.baseUrl}${API_URL.endpoint}${id}`,
-      });
+  const { data, isLoading: isFetching } = useGetBeerByIdQuery(id ?? skipToken);
 
-      if (response.data && isValidResult(response.data)) {
-        setIsLoading(false);
-        setData(response.data[0]);
-      }
-    } catch (error) {
-      setIsLoading(false);
-      setData(null);
-    }
-  }, [id, setIsLoading]);
+  const dispatchLoading = useCallback(() => {
+    dispatch(setLoadingValue(isFetching));
+  }, [dispatch, isFetching]);
 
   useEffect(() => {
-    getBeerData();
-  }, [getBeerData]);
-
+    dispatchLoading();
+  }, [dispatchLoading]);
   return (
     <div className="card-page" role="cartPage">
       <div className="card-page__content">
         <Link to={`/beer`} role="buttonLink">
           <button className="card-page__button">Back</button>
         </Link>
-        {isLoading ? (
+        {isFetching ? (
           <div className="loading" role="loading">
             <LoadingComponent />
           </div>
-        ) : beer ? (
+        ) : data ? (
           <>
             <div className="card-page__detail" role="detail">
-              <h2>{beer.name}</h2>
+              <h2>{data[0].name}</h2>
               <div className="card-page__img">
-                <img src={beer.image_url} alt={beer.name} role="img" />
+                <img src={data[0].image_url} alt={data[0].name} role="img" />
               </div>
               <p>
-                Tag: <b>{beer.tagline}</b>
+                Tag: <b>{data[0].tagline}</b>
               </p>
               <p>
-                Description: <b>{beer.description}</b>
+                Description: <b>{data[0].description}</b>
               </p>
               <p>
-                Date relase: <b>{beer.first_brewed}</b>
+                Date relase: <b>{data[0].first_brewed}</b>
               </p>
               <p>
-                Contributed: <b>{beer.contributed_by}</b>
+                Contributed: <b>{data[0].contributed_by}</b>
               </p>
             </div>
           </>

@@ -1,50 +1,46 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { Context } from '../../constants/context';
 import Results from './result-component';
 import { mockDataTest } from '../../mock/mock';
-import { BeerSort } from '../../types/response-interface';
-import axios from 'axios';
 import '@testing-library/jest-dom';
-import { mockContext } from '../../mock/mockContext';
 import CardPage from '../../pages/CardPage/CardPage';
-import MockAdapter from 'axios-mock-adapter';
+import { Provider } from 'react-redux';
+import { store } from '../../redux/store/store';
+import { mockBeerServer } from '../../mock/mockBeerServer';
+import { HttpResponse, http } from 'msw';
+import { API_URL } from '../../constants/request-url';
+import { setSearchValue } from '../../redux/features/searchSlice';
+import * as beerApi from '../../redux/api/beerApi';
+import userEvent from '@testing-library/user-event';
 
-const mockAxios = new MockAdapter(axios);
-
-const renderComponent = (mockDataTest: BeerSort[]) => {
+const renderComponent = () => {
   render(
-    <MemoryRouter initialEntries={['/beer']}>
-      <Context.Provider value={mockContext(mockDataTest)}>
+    <Provider store={store}>
+      <MemoryRouter initialEntries={[`/beer`]}>
         <Results />
-      </Context.Provider>
-    </MemoryRouter>
+      </MemoryRouter>
+    </Provider>
   );
 };
 
 describe('<Results />', () => {
-  it('Verify that the component renders the specified number of cards', () => {
-    renderComponent(mockDataTest);
+  const click = userEvent.setup();
+  beforeAll(() => mockBeerServer.listen({ onUnhandledRequest: 'error' }));
+  afterEach(() => mockBeerServer.resetHandlers());
+  afterAll(() => mockBeerServer.close());
 
-    const cards = screen.getAllByRole('card');
+  it('Verify that the component renders the specified number of cards', async () => {
+    renderComponent();
+
+    const cards = await screen.findAllByRole('card');
 
     expect(cards).toHaveLength(2);
   });
 
-  it('Check that an appropriate message is displayed if no cards are present', () => {
-    renderComponent([]);
+  it('Ensure that the card component renders the relevant card data', async () => {
+    renderComponent();
 
-    const message = screen.getByRole('empty');
-
-    expect(message).toHaveTextContent(
-      /No results were found for your request/i
-    );
-  });
-
-  it('Ensure that the card component renders the relevant card data', () => {
-    renderComponent(mockDataTest);
-
-    const cards = screen.getAllByRole('card');
+    const cards = await screen.findAllByRole('card');
 
     cards.forEach((card, index) => {
       const mockData = mockDataTest[index];
@@ -55,33 +51,80 @@ describe('<Results />', () => {
     });
   });
 
-  it('Validate that clicking on a card opens a detailed card component', () => {
-    renderComponent(mockDataTest);
+  it('Validate that clicking on a card opens a detailed card component', async () => {
+    renderComponent();
     const card = screen.getAllByRole('card');
     fireEvent.click(card[0]);
-    waitFor(() => {
+    render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/beer/1']}>
+          <CardPage />
+        </MemoryRouter>
+      </Provider>
+    );
+    await waitFor(() => {
       const cartDetails = screen.getByRole('cartPage');
       expect(cartDetails).toBeInTheDocument();
     });
   });
 
   it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
-    renderComponent(mockDataTest);
+    const mockUseGetBeerByIdQuery = vi.spyOn(beerApi, 'useGetBeerByIdQuery');
+    renderComponent();
     const card = screen.getAllByRole('card');
-    fireEvent.click(card[0]);
+    await click.click(card[0]);
     render(
-      <MemoryRouter initialEntries={['/beer/1']}>
-        <Context.Provider value={mockContext()}>
-          <CardPage data={null} />
-        </Context.Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/beer/1']}>
+          <CardPage />
+        </MemoryRouter>
+      </Provider>
     );
 
-    const spy = vi.spyOn(mockAxios, 'onGet');
-    mockAxios
-      .onGet('https://api.punkapi.com/v2/beers/1')
-      .reply(200, mockDataTest[0]);
-    expect(spy).toHaveBeenCalledTimes(1);
-    mockAxios.resetHistory();
+    await waitFor(() => {
+      expect(mockUseGetBeerByIdQuery).toHaveBeenCalledTimes(1);
+      mockUseGetBeerByIdQuery.mockReset();
+    });
+  });
+});
+
+describe('<Results /> empty', () => {
+  beforeAll(() => mockBeerServer.listen({ onUnhandledRequest: 'error' }));
+  afterEach(() => mockBeerServer.resetHandlers());
+  afterAll(() => mockBeerServer.close());
+
+  it('Check that an appropriate message is displayed if no cards are present', async () => {
+    store.dispatch(setSearchValue('invalidsearch'));
+    renderComponent();
+
+    mockBeerServer.use(
+      http.get(
+        `${API_URL.baseUrl}${API_URL.beerEndpoint}`,
+        () => {
+          return HttpResponse.json([]);
+        },
+        { once: true }
+      )
+    );
+
+    await waitFor(() => {
+      const message = screen.getByRole('empty');
+      expect(message).toHaveTextContent(
+        /No results were found for your request/i
+      );
+    });
+  });
+
+  it('Should send request after render component', async () => {
+    const mockUseGetBeersArrayQuery = vi.spyOn(
+      beerApi,
+      'useGetBeersArrayQuery'
+    );
+    renderComponent();
+    await waitFor(() => {
+      expect(mockUseGetBeersArrayQuery).toHaveBeenCalledTimes(1);
+      vi.resetAllMocks();
+      mockUseGetBeersArrayQuery.mockReset();
+    });
   });
 });

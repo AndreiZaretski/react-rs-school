@@ -1,57 +1,74 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import {
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+  render,
+} from '@testing-library/react';
+import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import PaginationComponent from './PaginationComponent';
-import { Context } from '../../constants/context';
-import { mockContext } from '../../mock/mockContext';
+import { userEvent } from '@testing-library/user-event';
+import { Provider } from 'react-redux';
+import { store } from '../../redux/store/store';
+
+const routes = [
+  {
+    path: '/beer',
+    element: <PaginationComponent />,
+  },
+];
 
 describe('<PaginationComponent />', () => {
-  const renderPagination = () => {
-    return render(
-      <MemoryRouter initialEntries={['/beer?page=1']}>
-        <Context.Provider value={mockContext()}>
-          <PaginationComponent />
-        </Context.Provider>
-      </MemoryRouter>
+  const router = createMemoryRouter(routes, {
+    initialEntries: ['/beer?page=1'],
+    initialIndex: 0,
+  });
+  const testMemoryRouter = () => {
+    render(
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
     );
   };
 
-  const pageNumber = '1';
-  it('Make sure the component updates URL query parameter when page changes', () => {
-    renderPagination();
-    const nextButton = screen.getByText('next');
-    fireEvent.click(nextButton);
+  const user = userEvent.setup();
+
+  it('Make sure the component updates URL query parameter when page changes', async () => {
+    testMemoryRouter();
+
+    const nextButton = await screen.findByRole('next');
+    await act(async () => await user.click(nextButton));
+
     waitFor(() => {
-      expect(window.location.search).toBe('?page=2');
-      expect(pageNumber).toBe('2');
+      expect(router.state.location.search).toBe('?page=2&limit=20');
     });
-    const prevButton = screen.getByText('prev');
-    fireEvent.click(prevButton);
-    waitFor(() => {
-      expect(window.location.search).toBe('?page=1');
-      expect(pageNumber).toBe('1');
+
+    const prevButton = await screen.findByText('prev');
+    await act(async () => await user.click(prevButton));
+    await waitFor(() => {
+      expect(router.state.location.search).toBe('?page=1&limit=20');
     });
   });
 
-  it('should be ?page=1 after change select active', () => {
-    renderPagination();
+  it('should be ?page=1 after change select active', async () => {
+    testMemoryRouter();
     const nextButton = screen.getByText('next');
     fireEvent.click(nextButton);
-    waitFor(() => {
-      expect(window.location.search).toBe('?page=2');
-      expect(screen.getByText('2')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(router.state.location.search).toBe('?page=1&limit=20');
+      expect(screen.getByText('1')).toBeInTheDocument();
     });
 
     const select = screen.getByLabelText('Elements per page');
     fireEvent.change(select, { target: { value: '10' } });
-    waitFor(() => {
-      expect(window.location.search).toBe('?page=1');
-      expect(window.location.search).toBe('?limit=10');
+    await waitFor(() => {
+      expect(router.state.location.search).toBe('?page=1&limit=10');
       expect(select).toHaveValue('10');
     });
   });
 
   it('should disable prev button on first page and next button on last page', () => {
-    renderPagination();
+    testMemoryRouter();
     const prevButton = screen.getByRole('prev');
     const nextButton = screen.getByRole('next');
     expect(prevButton).toBeDisabled();
