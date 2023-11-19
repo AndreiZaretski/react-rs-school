@@ -4,11 +4,20 @@ import { mockDataTest } from '../../mock/mock';
 import CardPage from '../../pages/CardPage/CardPage';
 import { Provider } from 'react-redux';
 import { store } from '../../redux/store/store';
+import { mockBeerServer } from '../../mock/mockBeerServer';
 
-const renderComponent = async () => {
+vi.mock('react-router-dom', () => {
+  const router = require('react-router-dom');
+  return {
+    ...router,
+    useParams: () => ({ id: '1' }),
+  };
+});
+
+const renderComponent = () => {
   render(
     <Provider store={store}>
-      <MemoryRouter initialEntries={['/beer/1']}>
+      <MemoryRouter initialEntries={['/1']} initialIndex={0}>
         <CardPage />
       </MemoryRouter>
     </Provider>
@@ -16,6 +25,10 @@ const renderComponent = async () => {
 };
 
 describe('<CardPage />', () => {
+  beforeAll(() => mockBeerServer.listen());
+  afterEach(() => mockBeerServer.resetHandlers());
+  afterAll(() => mockBeerServer.close());
+
   it('Check that a loading indicator is displayed while fetching data', async () => {
     renderComponent();
     const loading = await screen.findByRole('loading');
@@ -26,7 +39,7 @@ describe('<CardPage />', () => {
   it('Make sure the detailed card component correctly displays the detailed card data', async () => {
     renderComponent();
     const detail = await screen.findByRole('detail');
-    waitFor(() => {
+    await waitFor(() => {
       expect(detail).toBeInTheDocument();
       expect(detail).toHaveTextContent(mockDataTest[0].name);
       expect(detail).toHaveTextContent(mockDataTest[0].tagline);

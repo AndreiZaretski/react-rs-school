@@ -1,18 +1,13 @@
 import { Link, useParams } from 'react-router-dom';
-import { BeerSort } from '../../types/response-interface';
 import './CardPage.scss';
 import LoadingComponent from '../../components/loadingComponent/LoadingComponent';
 import { useGetBeerByIdQuery } from '../../redux/api/beerApi';
 import { skipToken } from '@reduxjs/toolkit/query';
 
-export interface CardPageProps {
-  data: BeerSort | null;
-}
 const CardPage = () => {
   const { id } = useParams();
 
-  const { data, error, isLoading } = useGetBeerByIdQuery(id ?? skipToken);
-  console.log(error);
+  const { data, isLoading } = useGetBeerByIdQuery(id ?? skipToken);
   return (
     <div className="card-page" role="cartPage">
       <div className="card-page__content">

@@ -12,21 +12,21 @@ const Results = () => {
   const dispatch = useDispatch();
   const searchParams = useSelector((state: AppState) => state.searchParams);
 
-  const { data, error, isLoading } = useGetBeersArrayQuery(searchParams);
+  const { data, error, isFetching } = useGetBeersArrayQuery(searchParams);
 
   const dispatchLoading = useCallback(() => {
     if (data) {
       dispatch(setLengthValue(data.length));
     }
 
-    dispatch(setLoadingValue(isLoading));
-  }, [data, dispatch, isLoading]);
+    dispatch(setLoadingValue(isFetching));
+  }, [data, dispatch, isFetching]);
 
   useEffect(() => {
     dispatchLoading();
   }, [dispatchLoading]);
 
-  return isLoading ? (
+  return isFetching ? (
     <LoadingComponent />
   ) : (
     <div className="content">
