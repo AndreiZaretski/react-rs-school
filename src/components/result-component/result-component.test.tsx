@@ -10,25 +10,8 @@ import { mockBeerServer } from '../../mock/mockBeerServer';
 import { HttpResponse, http } from 'msw';
 import { API_URL } from '../../constants/request-url';
 import { setSearchValue } from '../../redux/features/searchSlice';
-//import { beerApi } from '../../redux/api/beerApi';
-
-// vi.mock('../../redux/api/beerApi', () => {
-//   const useGetBeersArrayQuery = vi.fn();
-//   return {
-//     beerApi: {
-//       useGetBeersArrayQuery,
-//     },
-//   };
-// });
-
-// vi.mock('../../redux/api/beerApi', () => {
-//   const useGetBeersArrayQuery = vi.fn();
-//   return {
-//     beerApi: {
-//       useGetBeersArrayQuery,
-//     },
-//   };
-// });
+import * as beerApi from '../../redux/api/beerApi';
+import userEvent from '@testing-library/user-event';
 
 const renderComponent = () => {
   render(
@@ -41,6 +24,7 @@ const renderComponent = () => {
 };
 
 describe('<Results />', () => {
+  const click = userEvent.setup();
   beforeAll(() => mockBeerServer.listen({ onUnhandledRequest: 'error' }));
   afterEach(() => mockBeerServer.resetHandlers());
   afterAll(() => mockBeerServer.close());
@@ -52,20 +36,6 @@ describe('<Results />', () => {
 
     expect(cards).toHaveLength(2);
   });
-
-  // it('Should send request after render component', async () => {
-  //   renderComponent();
-  //   // const mockUseGetBeersArrayQuery = vi.spyOn(
-  //   //   beerApi,
-  //   //   'useGetBeersArrayQuery'
-  //   // );
-  //   // expect(mockUseGetBeersArrayQuery).toHaveBeenCalledTimes(1);
-  //   // vi.restoreAllMocks();
-  //   const { useGetBeersArrayQuery } =
-  //     require('../../redux/api/beerApi').beerApi;
-  //   expect(useGetBeersArrayQuery).toHaveBeenCalledTimes(1);
-  //   vi.resetAllMocks();
-  // });
 
   it('Ensure that the card component renders the relevant card data', async () => {
     renderComponent();
@@ -98,22 +68,24 @@ describe('<Results />', () => {
     });
   });
 
-  // it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
-  //   renderComponent();
-  //   const card = await screen.findAllByRole('card');
-  //   fireEvent.click(card[0]);
-  //   render(
-  //     <Provider store={store}>
-  //       <MemoryRouter initialEntries={['/beer/1']}>
-  //         <CardPage />
-  //       </MemoryRouter>
-  //     </Provider>
-  //   );
-  //   await import('../../redux/api/beerApi');
-  //   const mockUseGetBeerByIdQuery = vi.spyOn(beerApi, 'useGetBeerByIdQuery');
-  //   expect(mockUseGetBeerByIdQuery).toHaveBeenCalledTimes(1);
-  //   mockUseGetBeerByIdQuery.mockRestore();
-  // });
+  it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
+    const mockUseGetBeerByIdQuery = vi.spyOn(beerApi, 'useGetBeerByIdQuery');
+    renderComponent();
+    const card = screen.getAllByRole('card');
+    await click.click(card[0]);
+    render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/beer/1']}>
+          <CardPage />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    await waitFor(() => {
+      expect(mockUseGetBeerByIdQuery).toHaveBeenCalledTimes(1);
+      mockUseGetBeerByIdQuery.mockReset();
+    });
+  });
 });
 
 describe('<Results /> empty', () => {
@@ -140,6 +112,19 @@ describe('<Results /> empty', () => {
       expect(message).toHaveTextContent(
         /No results were found for your request/i
       );
+    });
+  });
+
+  it('Should send request after render component', async () => {
+    const mockUseGetBeersArrayQuery = vi.spyOn(
+      beerApi,
+      'useGetBeersArrayQuery'
+    );
+    renderComponent();
+    await waitFor(() => {
+      expect(mockUseGetBeersArrayQuery).toHaveBeenCalledTimes(1);
+      vi.resetAllMocks();
+      mockUseGetBeersArrayQuery.mockReset();
     });
   });
 });
