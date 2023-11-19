@@ -33,7 +33,6 @@ describe('<PaginationComponent />', () => {
 
   const user = userEvent.setup();
 
-  const pageNumber = '1';
   it('Make sure the component updates URL query parameter when page changes', async () => {
     testMemoryRouter();
 
@@ -42,14 +41,12 @@ describe('<PaginationComponent />', () => {
 
     waitFor(() => {
       expect(router.state.location.search).toBe('?page=2');
-      expect(pageNumber).toBe('2');
     });
 
     const prevButton = await screen.findByText('prev');
     await act(async () => await user.click(prevButton));
     await waitFor(() => {
       expect(router.state.location.search).toBe('?page=1');
-      expect(pageNumber).toBe('1');
     });
   });
 
