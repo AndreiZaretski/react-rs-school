@@ -18,9 +18,7 @@ const MainPage = () => {
   const dispatch = useDispatch();
   const hasError = useSelector((state: AppState) => state.error.hasError);
 
-  const { searchValue, pageNumber, limit } = useSelector(
-    (state: AppState) => state.searchParams
-  );
+  const { searchValue } = useSelector((state: AppState) => state.searchParams);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -47,13 +45,11 @@ const MainPage = () => {
   }, [getError]);
 
   const updateSearchParams = useCallback(() => {
-    searchParams.set('page', String(pageNumber));
-    searchParams.set('limit', String(limit));
     searchValue === ''
       ? searchParams.delete('name')
       : searchParams.set('name', searchValue);
     setSearchParams(searchParams);
-  }, [pageNumber, searchParams, limit, searchValue, setSearchParams]);
+  }, [searchParams, searchValue, setSearchParams]);
 
   useEffect(() => {
     updateSearchParams();

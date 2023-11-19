@@ -40,13 +40,13 @@ describe('<PaginationComponent />', () => {
     await act(async () => await user.click(nextButton));
 
     waitFor(() => {
-      expect(router.state.location.search).toBe('?page=2');
+      expect(router.state.location.search).toBe('?page=2&limit=20');
     });
 
     const prevButton = await screen.findByText('prev');
     await act(async () => await user.click(prevButton));
     await waitFor(() => {
-      expect(router.state.location.search).toBe('?page=1');
+      expect(router.state.location.search).toBe('?page=1&limit=20');
     });
   });
 
@@ -55,14 +55,14 @@ describe('<PaginationComponent />', () => {
     const nextButton = screen.getByText('next');
     fireEvent.click(nextButton);
     await waitFor(() => {
-      expect(router.state.location.search).toBe('?page=1');
+      expect(router.state.location.search).toBe('?page=1&limit=20');
       expect(screen.getByText('1')).toBeInTheDocument();
     });
 
     const select = screen.getByLabelText('Elements per page');
     fireEvent.change(select, { target: { value: '10' } });
     await waitFor(() => {
-      expect(router.state.location.search).toBe('?page=1');
+      expect(router.state.location.search).toBe('?page=1&limit=10');
       expect(select).toHaveValue('10');
     });
   });

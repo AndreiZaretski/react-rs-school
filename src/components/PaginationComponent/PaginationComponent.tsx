@@ -3,8 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setPageNumber, setLimit } from '../../redux/features/searchSlice';
 import { AppState } from '../../redux/store/store';
 import { Page_Number_Default } from '../../constants/searchParam';
+import { useCallback, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 const PaginationComponent = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const dispatch = useDispatch();
   const { dataLength } = useSelector((state: AppState) => state.dataLength);
 
@@ -24,6 +28,17 @@ const PaginationComponent = () => {
     dispatch(setPageNumber(Page_Number_Default));
     dispatch(setLimit(limit));
   };
+
+  const updateSearchParams = useCallback(() => {
+    searchParams.set('page', String(pageNumber));
+    searchParams.set('limit', String(limit));
+
+    setSearchParams(searchParams);
+  }, [pageNumber, searchParams, limit, setSearchParams]);
+
+  useEffect(() => {
+    updateSearchParams();
+  }, [updateSearchParams]);
   return (
     <div className={styles.pagination_block}>
       <label htmlFor="limit">Elements per page</label>
