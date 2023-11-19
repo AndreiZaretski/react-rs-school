@@ -3,18 +3,30 @@ import './CardPage.scss';
 import LoadingComponent from '../../components/loadingComponent/LoadingComponent';
 import { useGetBeerByIdQuery } from '../../redux/api/beerApi';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { useCallback, useEffect } from 'react';
+import { setLoadingValue } from '../../redux/features/isLoading';
+import { useDispatch } from 'react-redux';
 
 const CardPage = () => {
+  const dispatch = useDispatch();
   const { id } = useParams();
 
-  const { data, isLoading } = useGetBeerByIdQuery(id ?? skipToken);
+  const { data, isLoading: isFetching } = useGetBeerByIdQuery(id ?? skipToken);
+
+  const dispatchLoading = useCallback(() => {
+    dispatch(setLoadingValue(isFetching));
+  }, [dispatch, isFetching]);
+
+  useEffect(() => {
+    dispatchLoading();
+  }, [dispatchLoading]);
   return (
     <div className="card-page" role="cartPage">
       <div className="card-page__content">
         <Link to={`/beer`} role="buttonLink">
           <button className="card-page__button">Back</button>
         </Link>
-        {isLoading ? (
+        {isFetching ? (
           <div className="loading" role="loading">
             <LoadingComponent />
           </div>
