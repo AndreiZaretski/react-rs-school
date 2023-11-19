@@ -1,9 +1,9 @@
 import {
-  render,
   screen,
   fireEvent,
   waitFor,
   act,
+  render,
 } from '@testing-library/react';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import PaginationComponent from './PaginationComponent';
@@ -11,41 +11,40 @@ import { userEvent } from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { store } from '../../redux/store/store';
 
-describe('<PaginationComponent />', () => {
-  const testMemoryRouter = () => {
-    const router = createMemoryRouter(
-      [
-        {
-          path: '/beer',
-          element: <PaginationComponent />,
-        },
-      ],
-      {
-        initialEntries: ['/beer?page=1'],
-        initialIndex: 0,
-      }
-    );
+const routes = [
+  {
+    path: '/beer',
+    element: <PaginationComponent />,
+  },
+];
 
+describe('<PaginationComponent />', () => {
+  const router = createMemoryRouter(routes, {
+    initialEntries: ['/beer?page=1'],
+    initialIndex: 0,
+  });
+  const testMemoryRouter = () => {
     render(
       <Provider store={store}>
         <RouterProvider router={router} />
       </Provider>
     );
-    return { router };
   };
 
   const user = userEvent.setup();
 
   const pageNumber = '1';
   it('Make sure the component updates URL query parameter when page changes', async () => {
-    const { router } = testMemoryRouter();
+    testMemoryRouter();
 
     const nextButton = await screen.findByRole('next');
-    fireEvent.click(nextButton);
+    await act(async () => await user.click(nextButton));
+
     waitFor(() => {
-      expect(router.state.location.search).toBe('2');
+      expect(router.state.location.search).toBe('?page=2');
       expect(pageNumber).toBe('2');
     });
+
     const prevButton = await screen.findByText('prev');
     await act(async () => await user.click(prevButton));
     await waitFor(() => {
@@ -55,7 +54,7 @@ describe('<PaginationComponent />', () => {
   });
 
   it('should be ?page=1 after change select active', async () => {
-    const { router } = testMemoryRouter();
+    testMemoryRouter();
     const nextButton = screen.getByText('next');
     fireEvent.click(nextButton);
     await waitFor(() => {
