@@ -1,10 +1,11 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { mockDataTest } from '../../mock/mock';
 import CardPage from '../../pages/CardPage/CardPage';
 import { Provider } from 'react-redux';
 import { store } from '../../redux/store/store';
 import { mockBeerServer } from '../../mock/mockBeerServer';
+import userEvent from '@testing-library/user-event';
 
 vi.mock('react-router-dom', () => {
   const router = require('react-router-dom');
@@ -28,6 +29,8 @@ describe('<CardPage />', () => {
   beforeAll(() => mockBeerServer.listen());
   afterEach(() => mockBeerServer.resetHandlers());
   afterAll(() => mockBeerServer.close());
+
+  const user = userEvent.setup();
 
   it('Check that a loading indicator is displayed while fetching data', async () => {
     renderComponent();
@@ -56,9 +59,9 @@ describe('<CardPage />', () => {
     renderComponent();
 
     const button = screen.getByRole('buttonLink');
-    fireEvent.click(button);
-
     const detail = await screen.findByRole('cartPage');
+    expect(detail).toBeInTheDocument();
+    await act(async () => await user.click(button));
     waitFor(() => {
       expect(detail).not.toBeInTheDocument();
     });

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import './search-input.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -7,11 +7,14 @@ import {
 } from '../../redux/features/searchSlice';
 import { Page_Number_Default } from '../../constants/searchParam';
 import { AppState } from '../../redux/store/store';
+import { useSearchParams } from 'react-router-dom';
 
 const SearchInfo = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const isLoading = useSelector((state: AppState) => state.isLoading.isLoading);
   const dispatch = useDispatch();
   const [input, setInput] = useState(localStorage.getItem('searchValue') || '');
+  const { searchValue } = useSelector((state: AppState) => state.searchParams);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setInput(event.target.value);
@@ -22,6 +25,17 @@ const SearchInfo = () => {
     dispatch(setSearchValue(input));
     localStorage.setItem('searchValue', input);
   };
+
+  const updateSearchParams = useCallback(() => {
+    searchValue === ''
+      ? searchParams.delete('name')
+      : searchParams.set('name', searchValue);
+    setSearchParams(searchParams);
+  }, [searchParams, searchValue, setSearchParams]);
+
+  useEffect(() => {
+    updateSearchParams();
+  }, [updateSearchParams]);
 
   return (
     <div className="search-data">

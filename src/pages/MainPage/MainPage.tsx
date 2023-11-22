@@ -1,12 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import Results from '../../components/result-component/result-component';
 import SearchInfo from '../../components/search-input/search-input';
-import {
-  Outlet,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import './MainPage.scss';
 import PaginationComponent from '../../components/PaginationComponent/PaginationComponent';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,11 +9,8 @@ import { AppState } from '../../redux/store/store';
 import { setHasError } from '../../redux/features/errorSlice';
 
 const MainPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
   const hasError = useSelector((state: AppState) => state.error.hasError);
-
-  const { searchValue } = useSelector((state: AppState) => state.searchParams);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -43,17 +35,6 @@ const MainPage = () => {
   useEffect(() => {
     getError();
   }, [getError]);
-
-  const updateSearchParams = useCallback(() => {
-    searchValue === ''
-      ? searchParams.delete('name')
-      : searchParams.set('name', searchValue);
-    setSearchParams(searchParams);
-  }, [searchParams, searchValue, setSearchParams]);
-
-  useEffect(() => {
-    updateSearchParams();
-  }, [updateSearchParams]);
 
   return (
     <>

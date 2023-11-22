@@ -2,11 +2,14 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import SearchInfo from './search-input';
 import { store } from '../../redux/store/store';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 
 const renderInput = () => {
   render(
     <Provider store={store}>
-      <SearchInfo />
+      <MemoryRouter initialEntries={[`/beer`]}>
+        <SearchInfo />
+      </MemoryRouter>
     </Provider>
   );
 };
