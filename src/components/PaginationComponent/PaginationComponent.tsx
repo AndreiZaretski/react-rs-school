@@ -5,6 +5,7 @@ import { AppState } from '../../redux/store/store';
 import { Page_Number_Default } from '../../constants/searchParam';
 import { useCallback, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import React from 'react';
 
 const PaginationComponent = () => {
   const [searchParams, setSearchParams] = useSearchParams();

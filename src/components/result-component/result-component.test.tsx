@@ -12,6 +12,7 @@ import { API_URL } from '../../constants/request-url';
 import { setSearchValue } from '../../redux/features/searchSlice';
 import * as beerApi from '../../redux/api/beerApi';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 
 const renderComponent = () => {
   render(

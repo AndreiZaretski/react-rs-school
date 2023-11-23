@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { store } from '../../redux/store/store';
 import { mockBeerServer } from '../../mock/mockBeerServer';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 
 vi.mock('react-router-dom', () => {
   const router = require('react-router-dom');

@@ -6,6 +6,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useEffect } from 'react';
 import { setLoadingValue } from '../../redux/features/isLoading';
 import { useDispatch } from 'react-redux';
+import React from 'react';
 
 const CardPage = () => {
   const dispatch = useDispatch();

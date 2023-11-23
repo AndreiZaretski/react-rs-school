@@ -3,6 +3,7 @@ import SearchInfo from './search-input';
 import { store } from '../../redux/store/store';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
+import React from 'react';
 
 const renderInput = () => {
   render(

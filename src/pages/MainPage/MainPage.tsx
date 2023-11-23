@@ -7,6 +7,7 @@ import PaginationComponent from '../../components/PaginationComponent/Pagination
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../redux/store/store';
 import { setHasError } from '../../redux/features/errorSlice';
+import React from 'react';
 
 const MainPage = () => {
   const dispatch = useDispatch();

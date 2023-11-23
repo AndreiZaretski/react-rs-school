@@ -5,6 +5,7 @@ import CardPage from './pages/CardPage/CardPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import { Provider } from 'react-redux';
 import { store } from './redux/store/store';
+import React from 'react';
 
 const App = () => {
   return (

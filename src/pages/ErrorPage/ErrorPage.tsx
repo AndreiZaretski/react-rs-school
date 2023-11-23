@@ -1,5 +1,6 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 import './ErrorPage.scss';
+import React from 'react';
 
 interface ErrorProps {
   children?: ReactNode;

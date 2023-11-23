@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import ErrorPage from './ErrorPage';
 import { Provider } from 'react-redux';
 import { store } from '../../redux/store/store';
+import React from 'react';
 
 describe('<ErrorPage />', () => {
   it('renders ErrorPage component when error occurs', () => {

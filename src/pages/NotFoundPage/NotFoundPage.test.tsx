@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import NotFoundPage from './NotFoundPage';
 import MainPage from '../MainPage/MainPage';
+import React from 'react';
 
 describe('<NotFoundPage />', () => {
   it('Should be defined', () => {

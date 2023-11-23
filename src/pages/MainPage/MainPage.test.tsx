@@ -3,6 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import MainPage from './MainPage';
 import { Provider } from 'react-redux';
 import { store } from '../../redux/store/store';
+import React from 'react';
 
 describe('<Main />', () => {
   it('renders Main component', () => {

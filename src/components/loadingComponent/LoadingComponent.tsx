@@ -1,5 +1,7 @@
 import reactLogo from '../../assets/react.svg';
 import '../loadingComponent/LoadingComponent.scss';
+import React from 'react';
+
 const LoadingComponent = () => {
   return (
     <div className="loading">

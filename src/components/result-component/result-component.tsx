@@ -7,6 +7,7 @@ import LoadingComponent from '../loadingComponent/LoadingComponent';
 import { setLengthValue } from '../../redux/features/dataLengthSlice';
 import { setLoadingValue } from '../../redux/features/isLoading';
 import { useCallback, useEffect } from 'react';
+import React from 'react';
 
 const Results = () => {
   const dispatch = useDispatch();

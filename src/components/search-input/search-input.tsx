@@ -8,6 +8,7 @@ import {
 import { Page_Number_Default } from '../../constants/searchParam';
 import { AppState } from '../../redux/store/store';
 import { useSearchParams } from 'react-router-dom';
+import React from 'react';
 
 const SearchInfo = () => {
   const [searchParams, setSearchParams] = useSearchParams();
