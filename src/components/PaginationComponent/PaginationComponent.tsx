@@ -1,52 +1,51 @@
 import styles from './PaginationComponent.module.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import { setPageNumber, setLimit } from '../../redux/features/searchSlice';
+import { useSelector } from 'react-redux';
 import { AppState } from '../../redux/store/store';
 import { Page_Number_Default } from '../../constants/searchParam';
-import { useCallback, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import React from 'react';
+import { useRouter } from 'next/router';
+import { BeerQuery } from '@/constants/request-url';
 
 const PaginationComponent = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
 
-  const dispatch = useDispatch();
   const { dataLength } = useSelector((state: AppState) => state.dataLength);
 
-  const { pageNumber, limit } = useSelector(
-    (state: AppState) => state.searchParams
-  );
+  const pageNumber = Number(router.query[BeerQuery.Page]) || 1;
+  const limit = router.query[BeerQuery.Limit] || '20';
 
   const getNextPage = () => {
-    dispatch(setPageNumber(pageNumber + 1));
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, [BeerQuery.Page]: `${pageNumber + 1}` },
+    });
   };
 
   const getPrevPage = () => {
-    dispatch(setPageNumber(pageNumber - 1));
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, [BeerQuery.Page]: `${pageNumber - 1}` },
+    });
   };
 
   const newLimit = (limit: string) => {
-    dispatch(setPageNumber(Page_Number_Default));
-    dispatch(setLimit(limit));
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        [BeerQuery.Limit]: limit,
+        [BeerQuery.Page]: Page_Number_Default,
+      },
+    });
   };
 
-  const updateSearchParams = useCallback(() => {
-    searchParams.set('page', String(pageNumber));
-    searchParams.set('limit', String(limit));
-
-    setSearchParams(searchParams);
-  }, [pageNumber, searchParams, limit, setSearchParams]);
-
-  useEffect(() => {
-    updateSearchParams();
-  }, [updateSearchParams]);
   return (
     <div className={styles.pagination_block}>
       <label htmlFor="limit">Elements per page</label>
       <select
         id="limit"
         className={styles.pagination_block_button}
-        value={limit}
+        value={router.query[BeerQuery.Limit] || '20'}
         onChange={(e) => newLimit(e.target.value)}
       >
         <option value="5">5</option>

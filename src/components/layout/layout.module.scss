@@ -1,4 +1,4 @@
-.main-page {
+.main_page {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -10,7 +10,7 @@
   width: 100%;
 }
 
-.result-with-details {
+.result_with_details {
   position: relative;
   background-color: aqua;
   width: 50%;
@@ -29,18 +29,18 @@
   }
 }
 
-.result-details {
+.result_details {
   position: relative;
   display: block;
   width: 50%;
 }
 
-.result-details-none {
+.result_details_none {
   width: 0;
   display: none;
 }
 
-.error-block {
+.error_block {
   background-color: black;
   height: 48px;
   display: flex;

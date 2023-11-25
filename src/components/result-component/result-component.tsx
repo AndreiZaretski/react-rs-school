@@ -1,48 +1,55 @@
-import './result-component.scss';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppState } from '../../redux/store/store';
-import { useGetBeersArrayQuery } from '../../redux/api/beerApi';
-import LoadingComponent from '../loadingComponent/LoadingComponent';
-import { setLengthValue } from '../../redux/features/dataLengthSlice';
-import { setLoadingValue } from '../../redux/features/isLoading';
-import { useCallback, useEffect } from 'react';
-import React from 'react';
+import styles from './result-component.module.scss';
+import Link from 'next/link';
+import { BeerSort } from '@/types/response-interface';
+import { useDispatch } from 'react-redux';
+import { BeerQuery } from '@/constants/request-url';
+import { useGetBeersArrayQuery } from '@/redux/api/beerApi';
+import { setLengthValue } from '@/redux/features/dataLengthSlice';
+import { useRouter } from 'next/router';
 
-const Results = () => {
+type resultProps = {
+  beers: BeerSort[];
+};
+
+const Results = ({ beers }: resultProps) => {
   const dispatch = useDispatch();
-  const searchParams = useSelector((state: AppState) => state.searchParams);
+  const router = useRouter();
 
-  const { data, error, isFetching } = useGetBeersArrayQuery(searchParams);
+  const searchParams = router.query;
 
-  const dispatchLoading = useCallback(() => {
-    if (data) {
-      dispatch(setLengthValue(data.length));
+  const searchValue = searchParams[BeerQuery.Name] as string;
+  const pageNumber = searchParams[BeerQuery.Page] as string;
+  const limit = searchParams[BeerQuery.Limit] as string;
+
+  const { data } = useGetBeersArrayQuery(
+    {
+      searchValue,
+      pageNumber,
+      limit,
+    },
+    {
+      skip: router.isFallback,
     }
+  );
 
-    dispatch(setLoadingValue(isFetching));
-  }, [data, dispatch, isFetching]);
+  if (data) {
+    dispatch(setLengthValue(data.length));
+  }
 
-  useEffect(() => {
-    dispatchLoading();
-  }, [dispatchLoading]);
-
-  return isFetching ? (
-    <LoadingComponent />
-  ) : (
-    <div className="content">
-      {error || !data || data.length === 0 ? (
-        <div role="empty" className="content__empty">
+  return (
+    <div className={styles.content}>
+      {!beers || beers.length === 0 ? (
+        <div role="empty" className={styles.content__empty}>
           No results were found for your request
         </div>
       ) : (
-        <div className="content__cards">
-          {data.map((beer) => {
+        <div className={styles.content__cards}>
+          {beers.map((beer) => {
             return (
-              <Link to={`/beer/${beer.id}`} key={beer.id}>
-                <div role="card" className="content__item">
+              <Link href={`/beer/${beer.id}`} key={beer.id}>
+                <div role="card" className={styles.content__item}>
                   <h3>{beer.name}</h3>
-                  <div className="content__img">
+                  <div className={styles.content__img}>
                     <img src={beer.image_url} alt={beer.name} />
                   </div>
                   <p>
@@ -57,8 +64,8 @@ const Results = () => {
           })}
         </div>
       )}
-      <div className="content__info">
-        {data ? data.length : 0} of {325} shown
+      <div className={styles.content__info}>
+        {beers ? beers.length : 0} of {325} shown
       </div>
     </div>
   );

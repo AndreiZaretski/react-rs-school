@@ -1,12 +1,9 @@
-import reactLogo from '../../assets/react.svg';
-import '../loadingComponent/LoadingComponent.scss';
-import React from 'react';
+import styles from '../loadingComponent/LoadingComponent.module.scss';
 
 const LoadingComponent = () => {
   return (
-    <div className="loading">
+    <div className={styles.loading}>
       <p>...Loading</p>
-      <img src={reactLogo} className="logo" alt="React logo" />
     </div>
   );
 };

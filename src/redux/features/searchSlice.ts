@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Limit, Page_Number_Default } from '../../constants/searchParam';
 
 const initialSearchState = {
-  searchValue: localStorage.getItem('searchValue') || '',
+  searchValue: '',
   pageNumber: Page_Number_Default,
   limit: Limit[2],
 };
