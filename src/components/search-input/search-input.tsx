@@ -1,15 +1,12 @@
 import { useState } from 'react';
 import styles from './search-input.module.scss';
-import { useSelector } from 'react-redux';
 import { Page_Number_Default } from '../../constants/searchParam';
-import { AppState } from '../../redux/store/store';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { BeerQuery } from '@/constants/request-url';
 
 const SearchInfo = () => {
   const router = useRouter();
-  const isLoading = useSelector((state: AppState) => state.isLoading.isLoading);
   const [input, setInput] = useState('');
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -42,7 +39,6 @@ const SearchInfo = () => {
       <button
         type="button"
         className={styles.search_data__button}
-        disabled={isLoading}
         onClick={handleClick}
       >
         Search

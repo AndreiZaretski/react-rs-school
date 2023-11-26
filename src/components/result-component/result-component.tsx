@@ -1,11 +1,6 @@
 import styles from './result-component.module.scss';
 import Link from 'next/link';
 import { BeerSort } from '@/types/response-interface';
-import { useDispatch } from 'react-redux';
-import { BeerQuery } from '@/constants/request-url';
-import { useGetBeersArrayQuery } from '@/redux/api/beerApi';
-import { setLengthValue } from '@/redux/features/dataLengthSlice';
-import { useRouter } from 'next/router';
 import Image from 'next/image';
 
 type resultProps = {
@@ -13,30 +8,6 @@ type resultProps = {
 };
 
 const Results = ({ beers }: resultProps) => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-
-  const searchParams = router.query;
-
-  const searchValue = searchParams[BeerQuery.Name] as string;
-  const pageNumber = searchParams[BeerQuery.Page] as string;
-  const limit = searchParams[BeerQuery.Limit] as string;
-
-  const { data } = useGetBeersArrayQuery(
-    {
-      searchValue,
-      pageNumber,
-      limit,
-    },
-    {
-      skip: router.isFallback,
-    }
-  );
-
-  if (data) {
-    dispatch(setLengthValue(data.length));
-  }
-
   return (
     <div className={styles.content}>
       {!beers || beers.length === 0 ? (

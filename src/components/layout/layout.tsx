@@ -13,9 +13,15 @@ type Props = {
   children?: (beerById: BeerSort[] | null) => React.ReactNode | null;
   beers: BeerSort[];
   beerById: BeerSort[] | null;
+  dataLength?: number;
 };
 
-export default function Layout({ children, beers, beerById }: Props) {
+export default function Layout({
+  children,
+  beers,
+  beerById,
+  dataLength,
+}: Props) {
   const dispatch = useDispatch();
   const hasError = useSelector((state: AppState) => state.error.hasError);
 
@@ -48,7 +54,7 @@ export default function Layout({ children, beers, beerById }: Props) {
           onClick={goHome}
         >
           <SearchInfo />
-          <PaginationComponent />
+          <PaginationComponent dataLength={dataLength || 0} />
           <div>
             <Results beers={beers} />
           </div>

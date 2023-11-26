@@ -1,15 +1,15 @@
 import styles from './PaginationComponent.module.scss';
-import { useSelector } from 'react-redux';
-import { AppState } from '../../redux/store/store';
 import { Page_Number_Default } from '../../constants/searchParam';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { BeerQuery } from '@/constants/request-url';
 
-const PaginationComponent = () => {
-  const router = useRouter();
+type props = {
+  dataLength: number;
+};
 
-  const { dataLength } = useSelector((state: AppState) => state.dataLength);
+const PaginationComponent = ({ dataLength }: props) => {
+  const router = useRouter();
 
   const pageNumber = Number(router.query[BeerQuery.Page]) || 1;
   const limit = router.query[BeerQuery.Limit] || '20';

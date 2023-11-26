@@ -12,8 +12,9 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
 function Main({
   beers,
+  dataLength,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  return <Layout beers={beers} beerById={null} />;
+  return <Layout beers={beers} beerById={null} dataLength={dataLength} />;
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
@@ -50,6 +51,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
       state
     );
 
+    const dataLength = beers.data?.length;
+
     return {
       props: {
         beers: beers.data && !beers.isLoading && !beers.error ? beers.data : [],
@@ -57,12 +60,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
           beerById.data && !beerById.isLoading && !beerById.error
             ? beerById.data
             : [],
+        dataLength: dataLength || 0,
       },
     };
   }
 ) satisfies GetServerSideProps<{
   beers: BeerSort[];
   beerById: BeerSort[];
+  dataLength: number;
 }>;
 
 export default Main;
