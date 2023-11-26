@@ -2,7 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['images.punkapi.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.punkapi.com',
+      },
+    ],
   },
 };
 

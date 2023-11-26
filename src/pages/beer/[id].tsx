@@ -1,6 +1,8 @@
 import Layout from '@/components/layout/layout';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import CardPage from '@/components/CardPage/CardPage';
 import { BeerQuery } from '@/constants/request-url';
-import { Limit, Page_Number_Default } from '@/constants/searchParam';
+import { Page_Number_Default, Limit } from '@/constants/searchParam';
 import {
   getBeersArray,
   getBeerById,
@@ -8,12 +10,16 @@ import {
 } from '@/redux/api/beerApi';
 import { wrapper } from '@/redux/store/store';
 import { BeerSort } from '@/types/response-interface';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
-function Main({
+function BeerDetail({
   beers,
+  beerById,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  return <Layout beers={beers} beerById={null} />;
+  return (
+    <Layout beers={beers} beerById={beerById}>
+      {(beerById) => <CardPage beersById={beerById} />}
+    </Layout>
+  );
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
@@ -65,4 +71,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
   beerById: BeerSort[];
 }>;
 
-export default Main;
+export default BeerDetail;

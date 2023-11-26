@@ -29,7 +29,7 @@ export default function Layout({ children, beers, beerById }: Props) {
 
   const goHome = () => {
     if (id) {
-      router.back();
+      router.push('/beer');
     }
     return;
   };

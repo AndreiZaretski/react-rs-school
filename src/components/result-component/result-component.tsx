@@ -6,6 +6,7 @@ import { BeerQuery } from '@/constants/request-url';
 import { useGetBeersArrayQuery } from '@/redux/api/beerApi';
 import { setLengthValue } from '@/redux/features/dataLengthSlice';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 type resultProps = {
   beers: BeerSort[];
@@ -46,11 +47,18 @@ const Results = ({ beers }: resultProps) => {
         <div className={styles.content__cards}>
           {beers.map((beer) => {
             return (
-              <Link href={`/beer/${beer.id}`} key={beer.id}>
+              <Link href={`/beer/${beer.id}`} key={beer.id} replace>
                 <div role="card" className={styles.content__item}>
                   <h3>{beer.name}</h3>
                   <div className={styles.content__img}>
-                    <img src={beer.image_url} alt={beer.name} />
+                    {beer.image_url && (
+                      <Image
+                        src={beer.image_url}
+                        alt={beer.name}
+                        width={80}
+                        height={160}
+                      />
+                    )}
                   </div>
                   <p>
                     Tag: <b>{beer.tagline}</b>

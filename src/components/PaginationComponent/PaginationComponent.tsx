@@ -54,7 +54,7 @@ const PaginationComponent = () => {
       </select>
       <button
         className={styles.pagination_block_button}
-        disabled={pageNumber === Page_Number_Default}
+        disabled={pageNumber === +Page_Number_Default}
         onClick={getPrevPage}
         role="prev"
       >

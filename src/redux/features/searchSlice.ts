@@ -14,7 +14,7 @@ export const searchSlice = createSlice({
     setSearchValue: (state, action: PayloadAction<string>) => {
       state.searchValue = action.payload;
     },
-    setPageNumber: (state, action: PayloadAction<number>) => {
+    setPageNumber: (state, action: PayloadAction<string>) => {
       state.pageNumber = action.payload;
     },
     setLimit: (state, action: PayloadAction<string>) => {
