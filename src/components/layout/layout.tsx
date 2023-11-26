@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import PaginationComponent from '../PaginationComponent/PaginationComponent';
 import Results from '../result-component/result-component';
 import SearchInfo from '../search-input/search-input';

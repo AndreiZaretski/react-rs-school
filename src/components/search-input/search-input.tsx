@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import styles from './search-input.module.scss';
 import { Page_Number_Default } from '../../constants/searchParam';
-import React from 'react';
 import { useRouter } from 'next/router';
 import { BeerQuery } from '@/constants/request-url';
 

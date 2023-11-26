@@ -1,5 +1,4 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-import React from 'react';
 import styles from './ErrorPage.module.scss';
 
 interface ErrorProps {

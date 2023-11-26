@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import React from 'react';
 import styles from './404.module.scss';
 
 const NotFoundPage = () => {
