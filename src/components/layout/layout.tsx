@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import PaginationComponent from '../PaginationComponent/PaginationComponent';
 import Results from '../result-component/result-component';
 import SearchInfo from '../search-input/search-input';
@@ -24,6 +23,9 @@ export default function Layout({
 }: Props) {
   const dispatch = useDispatch();
   const hasError = useSelector((state: AppState) => state.error.hasError);
+  if (hasError) {
+    throw new Error("It's error from click button");
+  }
 
   const router = useRouter();
 
@@ -39,12 +41,6 @@ export default function Layout({
     }
     return;
   };
-
-  useEffect(() => {
-    if (hasError) {
-      throw new Error("It's error from click button");
-    }
-  }, [hasError]);
 
   return (
     <>
