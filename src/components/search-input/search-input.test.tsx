@@ -1,35 +1,20 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import SearchInfo from './search-input';
-import { store } from '../../redux/store/store';
-import { Provider } from 'react-redux';
+import mockRouter from 'next-router-mock';
 
+vi.mock('next/router', () => require('next-router-mock'));
 const renderInput = () => {
-  render(
-    <Provider store={store}>
-      <SearchInfo />
-    </Provider>
-  );
+  render(<SearchInfo />);
 };
 
 describe('<SearchInfo />', () => {
-  beforeEach(() => {
-    localStorage.clear();
-  });
-
-  it('Check that the component retrieves the value from the local storage upon mounting', () => {
-    localStorage.setItem('searchValue', 'test');
-    renderInput();
-    const input = screen.getByRole('input');
-    expect(input).toHaveValue('test');
-  });
-
-  it('Verify that clicking the Search button saves the entered value to the local storage', () => {
+  it('Verify that clicking the Search button should be change qyery params', () => {
     renderInput();
 
     const input = screen.getByRole('input');
     const button = screen.getByRole('button');
     fireEvent.change(input, { target: { value: 'test' } });
     fireEvent.click(button);
-    expect(localStorage.getItem('searchValue')).toBe('test');
+    expect(mockRouter.asPath).toBe('/?beer_name=test&page=1');
   });
 });

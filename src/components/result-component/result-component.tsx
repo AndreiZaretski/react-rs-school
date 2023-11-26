@@ -1,48 +1,35 @@
-import './result-component.scss';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppState } from '../../redux/store/store';
-import { useGetBeersArrayQuery } from '../../redux/api/beerApi';
-import LoadingComponent from '../loadingComponent/LoadingComponent';
-import { setLengthValue } from '../../redux/features/dataLengthSlice';
-import { setLoadingValue } from '../../redux/features/isLoading';
-import { useCallback, useEffect } from 'react';
+import styles from './result-component.module.scss';
+import Link from 'next/link';
+import { BeerSort } from '@/types/response-interface';
+import Image from 'next/image';
 
-const Results = () => {
-  const dispatch = useDispatch();
-  const searchParams = useSelector((state: AppState) => state.searchParams);
+type resultProps = {
+  beers: BeerSort[];
+};
 
-  const { data, error, isFetching } = useGetBeersArrayQuery(searchParams);
-
-  const dispatchLoading = useCallback(() => {
-    if (data) {
-      dispatch(setLengthValue(data.length));
-    }
-
-    dispatch(setLoadingValue(isFetching));
-  }, [data, dispatch, isFetching]);
-
-  useEffect(() => {
-    dispatchLoading();
-  }, [dispatchLoading]);
-
-  return isFetching ? (
-    <LoadingComponent />
-  ) : (
-    <div className="content">
-      {error || !data || data.length === 0 ? (
-        <div role="empty" className="content__empty">
+const Results = ({ beers }: resultProps) => {
+  return (
+    <div className={styles.content}>
+      {!beers || beers.length === 0 ? (
+        <div role="empty" className={styles.content__empty}>
           No results were found for your request
         </div>
       ) : (
-        <div className="content__cards">
-          {data.map((beer) => {
+        <div className={styles.content__cards}>
+          {beers.map((beer) => {
             return (
-              <Link to={`/beer/${beer.id}`} key={beer.id}>
-                <div role="card" className="content__item">
+              <Link href={`/beer/${beer.id}`} key={beer.id} replace>
+                <div role="card" className={styles.content__item}>
                   <h3>{beer.name}</h3>
-                  <div className="content__img">
-                    <img src={beer.image_url} alt={beer.name} />
+                  <div className={styles.content__img}>
+                    {beer.image_url && (
+                      <Image
+                        src={beer.image_url}
+                        alt={beer.name}
+                        width={80}
+                        height={160}
+                      />
+                    )}
                   </div>
                   <p>
                     Tag: <b>{beer.tagline}</b>
@@ -56,8 +43,8 @@ const Results = () => {
           })}
         </div>
       )}
-      <div className="content__info">
-        {data ? data.length : 0} of {325} shown
+      <div className={styles.content__info}>
+        {beers ? beers.length : 0} of {325} shown
       </div>
     </div>
   );

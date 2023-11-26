@@ -1,0 +1,31 @@
+.card_page {
+  width: 100%;
+  position: relative;
+
+  &__button {
+    margin: 5px;
+    width: 90px;
+    height: 40px;
+    background-color: antiquewhite;
+  }
+
+  &__content {
+    width: 50%;
+    background-color: aquamarine;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    overflow: scroll;
+  }
+
+  &__img {
+    margin: 0 auto;
+    overflow: hidden;
+
+    img {
+      height: 300px;
+      display: block;
+      margin: 0 auto;
+    }
+  }
+}

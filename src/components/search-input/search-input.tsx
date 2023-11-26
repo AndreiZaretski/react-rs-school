@@ -1,41 +1,43 @@
 import { useState } from 'react';
-import './search-input.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  setPageNumber,
-  setSearchValue,
-} from '../../redux/features/searchSlice';
+import styles from './search-input.module.scss';
 import { Page_Number_Default } from '../../constants/searchParam';
-import { AppState } from '../../redux/store/store';
+import { useRouter } from 'next/router';
+import { BeerQuery } from '@/constants/request-url';
 
 const SearchInfo = () => {
-  const isLoading = useSelector((state: AppState) => state.isLoading.isLoading);
-  const dispatch = useDispatch();
-  const [input, setInput] = useState(localStorage.getItem('searchValue') || '');
+  const router = useRouter();
+  const [input, setInput] = useState('');
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setInput(event.target.value);
   }
 
   const handleClick = () => {
-    dispatch(setPageNumber(Page_Number_Default));
-    dispatch(setSearchValue(input));
-    localStorage.setItem('searchValue', input);
+    if (!input) {
+      delete router.query[BeerQuery.Page];
+    }
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        [BeerQuery.Name]: input,
+        [BeerQuery.Page]: Page_Number_Default,
+      },
+    });
   };
 
   return (
-    <div className="search-data">
+    <div className={styles.search_data}>
       <input
         type="text"
-        className="search-data__input"
+        className={styles.search_data__input}
         value={input}
         onChange={handleChange}
         role="input"
       />
       <button
         type="button"
-        className="search-data__button"
-        disabled={isLoading}
+        className={styles.search_data__button}
         onClick={handleClick}
       >
         Search
