@@ -1,10 +1,12 @@
 import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { schema, ErrorsForm } from '../../config/formValidateConfig';
-import { countries } from '../../constantes/countries';
 import { ValidationError } from 'yup';
 import { setFormData } from '../../redux/features/formSlice';
-import ErrorValidation from '../../components/nav/errorValidation/ErrorValidation';
+import ErrorValidation from '../../components/errorValidation/ErrorValidation';
+import AutoComplitInput, {
+  CountryRef,
+} from '../../components/AutoComplitInput/AutoComplitInput';
 
 const UncontrolledForm = () => {
   const dispatch = useDispatch();
@@ -18,8 +20,7 @@ const UncontrolledForm = () => {
   const femaleRef = useRef<HTMLInputElement>(null);
   const acceptTermsRef = useRef<HTMLInputElement>(null);
   const pictureRef = useRef<HTMLInputElement>(null);
-  const [country, setCountry] = useState('');
-  const [filteredCountries, setFilteredCountries] = useState(['']);
+  const countryRef = useRef<CountryRef>(null);
   const [errors, setErrors] = useState<ErrorsForm>({});
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -37,6 +38,7 @@ const UncontrolledForm = () => {
         : undefined;
     const acceptTerms = acceptTermsRef.current?.checked;
     const picture = pictureRef.current?.files?.[0];
+    const country = countryRef.current?.getCountry();
 
     const data = {
       name,
@@ -78,17 +80,6 @@ const UncontrolledForm = () => {
         });
         setErrors(errorObj);
       });
-  };
-
-  const handleCountryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setCountry(value);
-
-    const filtered = countries.filter((country) =>
-      country.toLowerCase().startsWith(value.toLowerCase())
-    );
-
-    setFilteredCountries(filtered);
   };
 
   return (
@@ -149,19 +140,7 @@ const UncontrolledForm = () => {
         <ErrorValidation error={errors.picture} />
       </div>
       <div>
-        <label htmlFor="country">Country</label>
-        <input
-          id="country"
-          type="text"
-          value={country}
-          onChange={handleCountryChange}
-          list="countries"
-        />
-        <datalist id="countries">
-          {filteredCountries.map((country) => (
-            <option key={country} value={country} />
-          ))}
-        </datalist>
+        <AutoComplitInput ref={countryRef} />
         <ErrorValidation error={errors.country} />
       </div>
       <button type="submit">Submit</button>

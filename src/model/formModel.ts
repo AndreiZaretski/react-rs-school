@@ -21,5 +21,5 @@ export interface FormModel {
   confirmPassword: string | undefined;
   gender: string | undefined;
   acceptTerms: boolean | undefined;
-  country: string;
+  country: string | undefined;
 }
