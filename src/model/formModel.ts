@@ -15,7 +15,7 @@
 export interface FormModel {
   picture: string | ArrayBuffer | null;
   name: string | undefined;
-  age: string | undefined;
+  age: number | string | undefined;
   email: string | undefined;
   password: string | undefined;
   confirmPassword: string | undefined;

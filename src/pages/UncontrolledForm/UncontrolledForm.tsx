@@ -4,6 +4,7 @@ import { schema, ErrorsForm } from '../../config/formValidateConfig';
 import { countries } from '../../constantes/countries';
 import { ValidationError } from 'yup';
 import { setFormData } from '../../redux/features/formSlice';
+import ErrorValidation from '../../components/nav/errorValidation/ErrorValidation';
 
 const UncontrolledForm = () => {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const UncontrolledForm = () => {
     e.preventDefault();
 
     const name = nameRef.current?.value;
-    const age = ageRef.current?.value;
+    const age = ageRef.current ? +ageRef.current.value || undefined : undefined;
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
     const confirmPassword = confirmPasswordRef.current?.value;
@@ -91,31 +92,31 @@ const UncontrolledForm = () => {
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} noValidate>
       <div>
         <label htmlFor="name">Name</label>
         <input id="name" type="text" ref={nameRef} />
-        {errors.name && <p>{errors.name}</p>}
+        <ErrorValidation error={errors.name} />
       </div>
       <div>
         <label htmlFor="age">Age</label>
         <input id="age" type="number" ref={ageRef} />
-        {errors.age && <p>{errors.age}</p>}
+        <ErrorValidation error={errors.age} />
       </div>
       <div>
         <label htmlFor="email">Email</label>
         <input id="email" type="email" ref={emailRef} />
-        {errors.email && <p>{errors.email}</p>}
+        <ErrorValidation error={errors.email} />
       </div>
       <div>
         <label htmlFor="password">Password</label>
         <input id="password" type="password" ref={passwordRef} />
-        {errors.password && <p>{errors.password}</p>}
+        <ErrorValidation error={errors.password} />
       </div>
       <div>
         <label htmlFor="confirmPassword">Confirm Password</label>
         <input id="confirmPassword" type="password" ref={confirmPasswordRef} />
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+        <ErrorValidation error={errors.confirmPassword} />
       </div>
       <div>
         <label>Gender</label>
@@ -135,17 +136,17 @@ const UncontrolledForm = () => {
           name="gender"
         />
         <label htmlFor="female">Female</label>
-        {errors.gender && <p>{errors.gender}</p>}
+        <ErrorValidation error={errors.gender} />
       </div>
       <div>
         <input id="acceptTerms" type="checkbox" ref={acceptTermsRef} />
         <label htmlFor="acceptTerms">I accept the terms and conditions</label>
-        {errors.acceptTerms && <p>{errors.acceptTerms}</p>}
+        <ErrorValidation error={errors.acceptTerms} />
       </div>
       <div>
         <label htmlFor="picture">Picture</label>
         <input id="picture" type="file" ref={pictureRef} />
-        {errors.picture && <p>{errors.picture}</p>}
+        <ErrorValidation error={errors.picture} />
       </div>
       <div>
         <label htmlFor="country">Country</label>
@@ -161,7 +162,7 @@ const UncontrolledForm = () => {
             <option key={country} value={country} />
           ))}
         </datalist>
-        {errors.country && <p>{errors.country}</p>}
+        <ErrorValidation error={errors.country} />
       </div>
       <button type="submit">Submit</button>
     </form>

@@ -7,7 +7,9 @@ const Main = () => {
     <>
       <main className={styles.main}>
         <Nav />
-        <Outlet></Outlet>
+        <div className={styles.outlet}>
+          <Outlet></Outlet>
+        </div>
       </main>
     </>
   );

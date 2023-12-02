@@ -1,5 +1,9 @@
-main {
+.main {
   display: flex;
   flex-direction: column;
   position: relative;
+}
+
+.outlet {
+  margin-top: 40px;
 }

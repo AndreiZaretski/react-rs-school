@@ -1,0 +1,15 @@
+.errorValidate {
+  color: red;
+  text-align: center;
+  height: 40px;
+
+  p {
+    margin: 0;
+  }
+}
+
+@media (max-width: 450px) {
+  .errorValidate {
+    height: 68px;
+  }
+}

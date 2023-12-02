@@ -37,6 +37,7 @@ export const schema = object().shape({
     }),
   country: string()
     .required('Country is required')
+    .test('empty', 'Country is required', (value) => value !== '')
     .oneOf(countries, 'Such country does not exist'),
 });
 
