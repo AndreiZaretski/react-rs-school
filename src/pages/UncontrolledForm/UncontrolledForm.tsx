@@ -9,6 +9,7 @@ import AutoComplitInput, {
 } from '../../components/AutoComplitInput/AutoComplitInput';
 import { useNavigate } from 'react-router-dom';
 import PasswordStrength from '../../components/PasswordStrength/PasswordStrength';
+import styles from '../../styles/form.module.scss';
 
 const UncontrolledForm = () => {
   const dispatch = useDispatch();
@@ -90,28 +91,28 @@ const UncontrolledForm = () => {
     <>
       <h2>Uncontrolled form</h2>
       <form onSubmit={onSubmit} noValidate>
-        <div>
+        <div className={styles.form_elememt}>
           <label htmlFor="name">Name</label>
           <input id="name" type="text" ref={nameRef} />
           <ErrorValidation error={errors.name} />
         </div>
-        <div>
+        <div className={styles.form_elememt}>
           <label htmlFor="age">Age</label>
           <input id="age" type="number" ref={ageRef} />
           <ErrorValidation error={errors.age} />
         </div>
-        <div>
+        <div className={styles.form_elememt}>
           <label htmlFor="email">Email</label>
           <input id="email" type="email" ref={emailRef} />
           <ErrorValidation error={errors.email} />
         </div>
-        <div>
+        <div className={styles.form_elememt}>
           <label htmlFor="password">Password</label>
           <input id="password" type="password" ref={passwordRef} />
           <PasswordStrength password={passwordRef.current?.value || ''} />
           <ErrorValidation error={errors.password} />
         </div>
-        <div>
+        <div className={styles.form_elememt}>
           <label htmlFor="confirmPassword">Confirm Password</label>
           <input
             id="confirmPassword"
@@ -145,12 +146,12 @@ const UncontrolledForm = () => {
           <label htmlFor="acceptTerms">I accept the terms and conditions</label>
           <ErrorValidation error={errors.acceptTerms} />
         </div>
-        <div>
+        <div className={styles.form_elememt}>
           <label htmlFor="picture">Picture</label>
           <input id="picture" type="file" ref={pictureRef} />
           <ErrorValidation error={errors.picture} />
         </div>
-        <div>
+        <div className={styles.form_elememt}>
           <AutoComplitInput ref={countryRef} />
           <ErrorValidation error={errors.country} />
         </div>

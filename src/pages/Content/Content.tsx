@@ -8,10 +8,10 @@ const Content = () => {
   return (
     <div>
       <h2>Content from forms</h2>
-      <ul>
+      <ul className={styles.list}>
         {formData.map((card) => {
           return (
-            <li key={card.submitId} className={styles.item}>
+            <li key={card.submitId} className={styles.list_item}>
               <SubmitData {...card} />
             </li>
           );

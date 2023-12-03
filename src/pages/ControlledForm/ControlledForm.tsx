@@ -8,6 +8,7 @@ import { FormModel } from '../../model/formModel';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import PasswordStrength from '../../components/PasswordStrength/PasswordStrength';
+import styles from '../../styles/form.module.scss';
 
 const ControlledForm = () => {
   const dispatch = useDispatch();
@@ -47,28 +48,28 @@ const ControlledForm = () => {
     <>
       <h2>Controlled form</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
+        <div className={styles.form_elememt}>
           <label htmlFor="name">Name</label>
           <input id="name" type="text" {...register('name')} />
           <ErrorValidation error={errors.name?.message} />
         </div>
-        <div>
+        <div className={styles.form_elememt}>
           <label htmlFor="age">Age</label>
           <input id="age" type="number" {...register('age')} />
           <ErrorValidation error={errors.age?.message} />
         </div>
-        <div>
+        <div className={styles.form_elememt}>
           <label htmlFor="email">Email</label>
           <input id="email" type="email" {...register('email')} />
           <ErrorValidation error={errors.email?.message} />
         </div>
-        <div>
+        <div className={styles.form_elememt}>
           <label htmlFor="password">Password</label>
           <input id="password" type="password" {...register('password')} />
           <PasswordStrength password={password || ''} />
           <ErrorValidation error={errors.password?.message} />
         </div>
-        <div>
+        <div className={styles.form_elememt}>
           <label htmlFor="confirmPassword">Confirm Password</label>
           <input
             id="confirmPassword"
@@ -99,7 +100,7 @@ const ControlledForm = () => {
           <label htmlFor="acceptTerms">I accept the terms and conditions</label>
           <ErrorValidation error={errors.acceptTerms?.message} />
         </div>
-        <div>
+        <div className={styles.form_elememt}>
           <label htmlFor="picture">Picture</label>
           <Controller
             name="picture"
@@ -119,7 +120,7 @@ const ControlledForm = () => {
           />
           <ErrorValidation error={errors.picture?.message} />
         </div>
-        <div>
+        <div className={styles.form_elememt}>
           <Controller
             name="country"
             control={control}

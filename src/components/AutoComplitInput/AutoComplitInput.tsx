@@ -33,7 +33,7 @@ const AutoComplitInput = React.forwardRef<CountryRef, Props>(
       getCountry: () => country,
     }));
     return (
-      <div>
+      <>
         <label htmlFor="country">Country</label>
         <input
           id="country"
@@ -48,7 +48,7 @@ const AutoComplitInput = React.forwardRef<CountryRef, Props>(
             <option key={country} value={country} />
           ))}
         </datalist>
-      </div>
+      </>
     );
   }
 );

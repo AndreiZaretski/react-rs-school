@@ -1,5 +1,4 @@
 .card {
-  border: 3px solid purple;
   width: 300px;
   height: 500px;
   margin: 0 auto;
@@ -9,6 +8,8 @@
 
 .picture {
   overflow: hidden;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
   img {
     height: 100%;
   }
