@@ -8,10 +8,11 @@ export type CountryRef = {
 type Props = {
   value?: string;
   onChange?: (value: string) => void;
+  onBlur?: () => void;
 };
 
 const AutoComplitInput = React.forwardRef<CountryRef, Props>(
-  ({ value, onChange }, ref) => {
+  ({ value, onChange, onBlur }, ref) => {
     const [country, setCountry] = useState(value || '');
     const [filteredCountries, setFilteredCountries] = useState(['']);
 
@@ -39,6 +40,7 @@ const AutoComplitInput = React.forwardRef<CountryRef, Props>(
           type="text"
           value={country}
           onChange={handleCountryChange}
+          onBlur={onBlur}
           list="countries"
         />
         <datalist id="countries">

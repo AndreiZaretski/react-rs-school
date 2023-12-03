@@ -7,6 +7,7 @@ export const schema = object().shape({
     .matches(/^[A-Z][a-z]*$/, 'Name should start with an uppercased letter'),
   age: number()
     .required('Age is required')
+    .typeError('Age is required')
     .positive('Age should be positive')
     .integer('Age should be an integer'),
   email: string()
@@ -25,19 +26,21 @@ export const schema = object().shape({
   acceptTerms: boolean()
     .required('You must accept the terms and conditions')
     .oneOf([true], 'You must accept the terms and conditions'),
-  picture: mixed()
+  picture: mixed<File>()
     .required('Picture is required')
     .test('fileSize', 'Picture size should be less than 1 MB', (value) => {
-      const file = value as File;
-      return file && file.size <= 1048576;
+      if (value instanceof File) {
+        return value && value.size <= 1048576;
+      }
     })
     .test('fileType', 'Picture should be a png or jpeg file', (value) => {
-      const file = value as File;
-      return file && ['image/png', 'image/jpeg'].includes(file.type);
+      if (value instanceof File) {
+        return value && ['image/png', 'image/jpeg'].includes(value.type);
+      }
     }),
   country: string()
-    .required('Country is required')
     .test('empty', 'Country is required', (value) => value !== '')
+    .required('Country is required')
     .oneOf(countries, 'Such country does not exist'),
 });
 

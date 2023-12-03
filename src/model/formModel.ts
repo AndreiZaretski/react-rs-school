@@ -13,7 +13,7 @@
 // }
 
 export interface FormModel {
-  picture: string | ArrayBuffer | null;
+  picture: string | ArrayBuffer | null | FileList | File;
   name: string | undefined;
   age: number | string | undefined;
   email: string | undefined;
