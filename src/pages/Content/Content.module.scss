@@ -1,0 +1,21 @@
+.item {
+  width: 300px;
+  margin: 0 auto;
+  &:last-child {
+    border: 3px solid red;
+    animation: change-color 5s;
+  }
+}
+
+@keyframes change-color {
+  0% {
+    background-color: yellowgreen;
+  }
+
+  50% {
+    background-color: green;
+  }
+  100% {
+    background-color: inherit;
+  }
+}

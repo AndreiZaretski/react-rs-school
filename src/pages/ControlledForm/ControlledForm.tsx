@@ -23,7 +23,6 @@ const ControlledForm = () => {
   });
 
   const onSubmit = (data: FormModel) => {
-    console.log(data);
     let file: string | ArrayBuffer | null = null;
     const reader = new FileReader();
     if (data.picture && data.picture instanceof File) {
@@ -109,6 +108,7 @@ const ControlledForm = () => {
                     field.onChange(e.target.files[0]);
                   }
                 }}
+                onBlur={field.onBlur}
               />
             )}
           />

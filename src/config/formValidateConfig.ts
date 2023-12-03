@@ -16,8 +16,8 @@ export const schema = object().shape({
   password: string()
     .required('Password is required')
     .matches(
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/,
-      'Password should have at least 8 characters, 1 number, 1 uppercased letter, 1 lowercased letter and 1 special character'
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{4,}$/,
+      'Password should have 1 number, 1 uppercased letter, 1 lowercased letter and 1 special character'
     ),
   confirmPassword: string()
     .required('Confirm password is required')
