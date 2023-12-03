@@ -3,7 +3,7 @@ import styles from './SubmitData.module.scss';
 
 const SubmitData = (props: FormPrintModel) => {
   const { picture } = props;
-  const entries = Object.entries(props);
+  const entries = Object.entries(props).reverse();
   return (
     <>
       <div className={styles.card}>

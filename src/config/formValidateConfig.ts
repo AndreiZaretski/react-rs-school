@@ -5,9 +5,10 @@ export const schema = object().shape({
   name: string()
     .required('Name is required')
     .matches(
-      /^[A-Z\u0410-\u042F][a-z\u0430-\u044F]*$/,
+      /^[\p{Lu}\p{Lt}].*$/u,
       'Name should start with an uppercased letter'
-    ),
+    )
+    .test('empty', 'Name is required', (value) => value !== ''),
   age: number()
     .required('Age is required')
     .typeError('Age is required')
@@ -21,7 +22,8 @@ export const schema = object().shape({
     .matches(
       /^(?=.*\d)(?=.*[a-z\u0430-\u044F])(?=.*[A-Z\u0410-\u042F])(?=.*[!@#$%^&*]).{4,}$/,
       'Password should have 1 number, 1 uppercased letter, 1 lowercased letter and 1 special character'
-    ),
+    )
+    .test('empty', 'Password is required', (value) => value !== ''),
   confirmPassword: string()
     .required('Confirm password is required')
     .oneOf([ref('password')], 'Passwords should match'),
@@ -42,9 +44,9 @@ export const schema = object().shape({
       }
     }),
   country: string()
-    .test('empty', 'Country is required', (value) => value !== '')
     .required('Country is required')
-    .oneOf(countries, 'Such country does not exist'),
+    .oneOf(['', ...countries], 'Such country does not exist')
+    .test('empty', 'Country is required', (value) => value !== ''),
 });
 
 type Data = InferType<typeof schema>;

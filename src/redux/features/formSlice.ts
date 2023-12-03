@@ -11,9 +11,9 @@ export const formSlice = createSlice({
   reducers: {
     setFormData: (state, action: PayloadAction<FormModel>) => {
       state.push({
-        ...action.payload,
         submitId: ID_SUBMIT++,
         submitDate: new Date().toString(),
+        ...action.payload,
       });
     },
   },

@@ -44,15 +44,15 @@ const UncontrolledForm = () => {
     const country = countryRef.current?.getCountry();
 
     const data = {
-      name,
-      age,
-      email,
-      password,
-      confirmPassword,
-      gender,
-      acceptTerms,
-      picture,
       country,
+      picture,
+      acceptTerms,
+      gender,
+      confirmPassword,
+      password,
+      email,
+      age,
+      name,
     };
 
     schema

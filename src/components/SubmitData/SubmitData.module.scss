@@ -1,16 +1,15 @@
 .card {
   border: 3px solid purple;
   width: 300px;
+  height: 500px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
 }
 
 .picture {
-  width: 300px;
   overflow: hidden;
-
   img {
-    width: 300px;
+    height: 100%;
   }
 }
