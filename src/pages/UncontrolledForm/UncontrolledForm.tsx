@@ -8,6 +8,7 @@ import AutoComplitInput, {
   CountryRef,
 } from '../../components/AutoComplitInput/AutoComplitInput';
 import { useNavigate } from 'react-router-dom';
+import PasswordStrength from '../../components/PasswordStrength/PasswordStrength';
 
 const UncontrolledForm = () => {
   const dispatch = useDispatch();
@@ -107,6 +108,7 @@ const UncontrolledForm = () => {
         <div>
           <label htmlFor="password">Password</label>
           <input id="password" type="password" ref={passwordRef} />
+          <PasswordStrength password={passwordRef.current?.value || ''} />
           <ErrorValidation error={errors.password} />
         </div>
         <div>

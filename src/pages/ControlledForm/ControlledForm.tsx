@@ -7,6 +7,7 @@ import AutoComplitInput from '../../components/AutoComplitInput/AutoComplitInput
 import { FormModel } from '../../model/formModel';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
+import PasswordStrength from '../../components/PasswordStrength/PasswordStrength';
 
 const ControlledForm = () => {
   const dispatch = useDispatch();
@@ -16,11 +17,14 @@ const ControlledForm = () => {
     register,
     handleSubmit,
     formState: { errors, isValid },
+    watch,
     control,
   } = useForm({
     resolver: yupResolver(schema),
     mode: 'all',
   });
+
+  const password = watch('password');
 
   const onSubmit = (data: FormModel) => {
     let file: string | ArrayBuffer | null = null;
@@ -61,6 +65,7 @@ const ControlledForm = () => {
         <div>
           <label htmlFor="password">Password</label>
           <input id="password" type="password" {...register('password')} />
+          <PasswordStrength password={password || ''} />
           <ErrorValidation error={errors.password?.message} />
         </div>
         <div>

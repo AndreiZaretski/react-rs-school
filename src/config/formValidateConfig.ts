@@ -4,7 +4,10 @@ import { countries } from '../constantes/countries';
 export const schema = object().shape({
   name: string()
     .required('Name is required')
-    .matches(/^[A-Z][a-z]*$/, 'Name should start with an uppercased letter'),
+    .matches(
+      /^[A-Z\u0410-\u042F][a-z\u0430-\u044F]*$/,
+      'Name should start with an uppercased letter'
+    ),
   age: number()
     .required('Age is required')
     .typeError('Age is required')
@@ -16,7 +19,7 @@ export const schema = object().shape({
   password: string()
     .required('Password is required')
     .matches(
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{4,}$/,
+      /^(?=.*\d)(?=.*[a-z\u0430-\u044F])(?=.*[A-Z\u0410-\u042F])(?=.*[!@#$%^&*]).{4,}$/,
       'Password should have 1 number, 1 uppercased letter, 1 lowercased letter and 1 special character'
     ),
   confirmPassword: string()
