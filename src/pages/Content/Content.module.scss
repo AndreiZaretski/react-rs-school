@@ -1,0 +1,29 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  &_item {
+    width: 300px;
+    margin: 0 auto;
+    border: 3px solid purple;
+    border-radius: 15px;
+    &:last-child {
+      border: 4px solid red;
+      animation: change-color 5s;
+    }
+  }
+
+  @keyframes change-color {
+    0% {
+      background-color: yellowgreen;
+    }
+
+    50% {
+      background-color: green;
+    }
+    100% {
+      background-color: inherit;
+    }
+  }
+}
