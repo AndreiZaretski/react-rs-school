@@ -1,17 +1,3 @@
-//import { Gender } from './gender.enum';
-
-// export interface FormModel {
-//   name: string;
-//   age: number;
-//   email: string;
-//   password: string;
-//   confirmPassword: string;
-//   gender: Gender;
-//   acceptTerms: boolean;
-//   picture: string;
-//   country: string;
-// }
-
 export interface FormModel {
   picture: string | ArrayBuffer | null | FileList | File;
   name: string | undefined;
@@ -22,4 +8,9 @@ export interface FormModel {
   gender: string | undefined;
   acceptTerms: boolean | undefined;
   country: string | undefined;
+}
+
+export interface FormPrintModel extends FormModel {
+  submitId: number;
+  submitDate: string;
 }
